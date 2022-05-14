@@ -70,5 +70,10 @@ query ($id: String!) {
             description
         }
     }
+    site {
+        siteMetadata {
+            title
+        }
+    }
 }
 `
