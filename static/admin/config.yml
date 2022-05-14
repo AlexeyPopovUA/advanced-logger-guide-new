@@ -1,0 +1,112 @@
+backend:
+  base_url: https://git-oauth.advancedlogger.com
+  auth_endpoint: auth
+  name: github
+  repo: AlexeyPopovUA/advanced-logger-guide
+  use_graphql: true
+  commit_messages:
+    create: 'chore(create): {{collection}} “{{slug}}”'
+    update: 'chore(update): {{collection}} “{{slug}}”'
+    delete: 'chore(delete): {{collection}} “{{slug}}”'
+    uploadMedia: 'chore(skip-ci): upload “{{path}}”'
+    deleteMedia: 'chore(skip-ci): delete “{{path}}”'
+
+local_backend: true
+
+publish_mode: editorial_workflow
+media_folder: static/img
+public_folder: /img
+site_url: https://www.advancedlogger.com
+
+collections:
+  - name: "pages"
+    label: "Pages"
+    create: false
+    identifier_field: name
+    files:
+      - file: "src/pages/index.md"
+        name: "about"
+        label: "About"
+        fields:
+          - {label: "Template Key", name: "templateKey", widget: "hidden", default: "about-page"}
+          - {label: "Title", name: title, widget: string}
+          - {label: "Body", name: "body", widget: "markdown"}
+          - {label: "Meta description", name: description, widget: string}
+          - {label: "Meta keywords", name: keyWords, widget: string}
+      - file: "src/pages/contacts.md"
+        name: "contacts"
+        label: "Contacts"
+        fields:
+          - { label: "Template Key", name: "templateKey", widget: "hidden", default: "contacts-page" }
+          - { label: "Title", name: title, widget: string }
+          - { label: "Body", name: "body", widget: "markdown", required: false }
+          - { label: "Facebook", name: "facebook", widget: "string", required: false }
+          - { label: "GitHub", name: "github", widget: "string", required: false }
+          - { label: "Email", name: "email", widget: "string", required: false }
+          - { label: "Linkedin", name: "linkedin", widget: "string", required: false }
+          - { label: "Web page", name: "webpage", widget: "string", required: false }
+          - { label: "Meta description", name: description, widget: string, required: false }
+          - { label: "Meta keywords", name: keyWords, widget: string, required: false }
+      - file: "src/pages/contribution.md"
+        name: "contribution"
+        label: "Contribution"
+        fields:
+          - { label: "Template Key", name: "templateKey", widget: "hidden", default: "contribution-page" }
+          - { label: "Title", name: title, widget: string }
+          - { label: "Body", name: "body", widget: "markdown" }
+          - { label: "Meta description", name: description, widget: string }
+          - { label: "Meta keywords", name: keyWords, widget: string }
+      - file: "src/pages/grouping.md"
+        name: "grouping"
+        label: "Grouping"
+        fields:
+          - { label: "Template Key", name: "templateKey", widget: "hidden", default: "grouping-page" }
+          - { label: "Title", name: title, widget: string }
+          - { label: "Body", name: "body", widget: "markdown" }
+          - { label: "Meta description", name: description, widget: string }
+          - { label: "Meta keywords", name: keyWords, widget: string }
+      - file: "src/pages/getting-started.md"
+        name: "getting-started"
+        label: "Getting started"
+        fields:
+          - { label: "Template Key", name: "templateKey", widget: "hidden", default: "getting-started-page" }
+          - { label: "Title", name: title, widget: string }
+          - { label: "Body", name: "body", widget: "markdown" }
+          - { label: "Meta description", name: description, widget: string }
+          - { label: "Meta keywords", name: keyWords, widget: string }
+      - file: "src/pages/service.md"
+        name: "service"
+        label: "Service"
+        fields:
+          - { label: "Template Key", name: "templateKey", widget: "hidden", default: "service-page" }
+          - { label: "Title", name: title, widget: string }
+          - { label: "Body", name: "body", widget: "markdown" }
+          - { label: "Meta description", name: description, widget: string }
+          - { label: "Meta keywords", name: keyWords, widget: string }
+      - file: "src/pages/strategy.md"
+        name: "strategy"
+        label: "Strategy"
+        fields:
+          - { label: "Template Key", name: "templateKey", widget: "hidden", default: "strategy-page" }
+          - { label: "Title", name: title, widget: string }
+          - { label: "Body", name: "body", widget: "markdown" }
+          - { label: "Meta description", name: description, widget: string }
+          - { label: "Meta keywords", name: keyWords, widget: string }
+      - file: "src/pages/releases.md"
+        name: "releases"
+        label: "Releases"
+        fields:
+          - { label: "Template Key", name: "templateKey", widget: "hidden", default: "releases-page" }
+          - { label: "Title", name: title, widget: string }
+          - { label: "Body", name: "body", widget: "markdown" }
+          - { label: "Meta description", name: description, widget: string }
+          - { label: "Meta keywords", name: keyWords, widget: string }
+      - file: "src/pages/404.md"
+        name: "404"
+        label: "404"
+        fields:
+          - { label: "Template Key", name: "templateKey", widget: "hidden", default: "404-page" }
+          - { label: "Title", name: title, widget: string }
+          - { label: "Body", name: "body", widget: "markdown" }
+          - { label: "Meta description", name: description, widget: string }
+          - { label: "Meta keywords", name: keyWords, widget: string }
