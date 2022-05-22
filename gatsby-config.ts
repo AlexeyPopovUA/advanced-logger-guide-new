@@ -1,6 +1,6 @@
 module.exports = {
     siteMetadata: {
-        title: `Advanced Logger Guide`,
+        title: `Advanced Logger`,
         author: {
             name: `Oleksii Popov`,
             summary: `summary text`,
@@ -67,5 +67,8 @@ module.exports = {
         // this (optional) plugin enables Progressive Web App + Offline functionality
         // To learn more, visit: https://gatsby.dev/offline
         // `gatsby-plugin-offline`,
-    ],
+        {
+            resolve: `gatsby-plugin-postcss`
+        }
+    ]
 }
