@@ -69,6 +69,7 @@ module.exports = {
         // `gatsby-plugin-offline`,
         {
             resolve: `gatsby-plugin-postcss`
-        }
+        },
+        `gatsby-plugin-sass`
     ]
 }

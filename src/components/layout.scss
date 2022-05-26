@@ -1,0 +1,23 @@
+.article-content {
+  h1, h2, h3, h4 {
+    font-weight: bold;
+  }
+
+  h2, h3, h4 {
+    margin: 10px 0 10px 0;
+  }
+
+  p {
+    padding: 10px 0 10px 0;
+  }
+
+  ul, ol {
+    margin: 10px 0 10px 0;
+    padding-left: 1rem;
+    list-style: inherit;
+
+    li {
+      margin-left: 1rem;
+    }
+  }
+}
