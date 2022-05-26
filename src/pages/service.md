@@ -2,6 +2,7 @@
 title: Service
 date: "2015-05-01T22:12:03.284Z"
 template: regular-static-page
+nav-menu-order: 2
 ---
 
 Currently, module supports Sumologic, Loggly and Elastic search services out of the box.
