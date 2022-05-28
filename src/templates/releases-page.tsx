@@ -1,5 +1,6 @@
 import * as React from "react";
 import { graphql, PageProps } from "gatsby";
+import { parse } from "marked";
 
 import Layout from "../components/layout";
 import Seo from "../components/seo";
@@ -21,21 +22,40 @@ type DataProps = {
     }
 }
 
-const Template: React.FC<PageProps<DataProps, Context>> = ({ data, location }) => {
-    const post = data.markdownRemark;
+class Template extends React.Component<PageProps<DataProps, Context>, { releasesContent: string }> {
+    constructor(props) {
+        super(props);
 
-    return (
-        <Layout location={location}>
-            <Seo
-                title={post.frontmatter.title}
-                description={post.frontmatter.description || post.excerpt}
-            />
-            <h1 itemProp="headline"
-                className="font-bold font-sans break-normal text-gray-900 pt-6 pb-2 text-3xl md:text-4xl">{post.frontmatter.title}</h1>
-            <p className="text-sm md:text-base font-normal text-gray-600">{post.frontmatter.date}</p>
-            <div dangerouslySetInnerHTML={{ __html: post.html }} />
-        </Layout>
-    )
+        this.state = {
+            releasesContent: ""
+        };
+    }
+
+    async componentDidMount() {
+        const resp = await fetchReleases();
+
+        this.setState({
+            releasesContent: parse(resp)
+        });
+    }
+
+    render() {
+        let { data, location } = this.props;
+        const post = data.markdownRemark;
+
+        return (
+            <Layout location={location}>
+                <Seo
+                    title={post.frontmatter.title}
+                    description={post.frontmatter.description || post.excerpt}
+                />
+                <h1 itemProp="headline"
+                    className="font-bold font-sans break-normal text-gray-900 pt-6 pb-2 text-3xl md:text-4xl">{post.frontmatter.title}</h1>
+                <div dangerouslySetInnerHTML={{ __html: post.html }} />
+                <div dangerouslySetInnerHTML={{ __html: this.state.releasesContent }} />
+            </Layout>
+        );
+    }
 }
 
 const fetchReleases = async () => {
@@ -47,7 +67,7 @@ const fetchReleases = async () => {
     }
 
     return "";
-}
+};
 
 export default Template;
 
@@ -64,4 +84,4 @@ query ($id: String!) {
         }
     }
 }
-`
+`;
