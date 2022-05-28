@@ -21,7 +21,7 @@ type HeaderQuesryResponse = {
     }
 }
 
-export default (props: { location }) => {
+export default (props) => {
     const data: HeaderQuesryResponse = useStaticQuery(graphql`
     query HeaderQuery {
         allMarkdownRemark(filter: {fields: {slug: {nin: ["/404/", "/"]}}}) {
@@ -75,7 +75,7 @@ export default (props: { location }) => {
                     {data.allMarkdownRemark.nodes.map(node => (
                         <li key={node.id} className="mr-0.75">
                             <Link
-                                className={`inline-block ${node.fields.slug !== location.pathname ? "text-gray-400 hover:text-gray-100" : "text-gray-100" } no-underline py-4 px-4`}
+                                className={`inline-block ${node.fields.slug !== props.location.pathname ? "text-gray-400 hover:text-gray-100" : "text-gray-100" } no-underline py-4 px-4`}
                                 to={node.fields.slug}>{node.frontmatter.title}</Link>
                         </li>
                     ))}
