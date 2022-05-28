@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link, graphql, PageProps } from "gatsby";
+import { graphql, PageProps } from "gatsby";
 
 import Layout from "../components/layout";
 import Seo from "../components/seo";
@@ -19,19 +19,13 @@ type DataProps = {
             description: string;
         }
     }
-    site: {
-        siteMetadata: {
-            title: string;
-        }
-    }
 }
 
 const Template: React.FC<PageProps<DataProps, Context>> = ({ data, location }) => {
     const post = data.markdownRemark;
-    const siteTitle = data.site.siteMetadata.title;
 
     return (
-        <Layout location={location} title={siteTitle}>
+        <Layout location={location}>
             <Seo
                 title={post.frontmatter.title}
                 description={post.frontmatter.description || post.excerpt}

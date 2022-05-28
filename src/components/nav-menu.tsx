@@ -1,6 +1,6 @@
 import * as React from "react";
+import { useState } from "react";
 import { graphql, Link, useStaticQuery } from "gatsby";
-import { ReactComponentElement } from "react";
 
 type HeaderQuesryResponse = {
     allMarkdownRemark: {
@@ -14,9 +14,14 @@ type HeaderQuesryResponse = {
             id: string;
         }>
     }
+    site: {
+        siteMetadata: {
+            title: string;
+        }
+    }
 }
 
-export default (props: { header: ReactComponentElement<any>, location }) => {
+export default (props: { location }) => {
     const data: HeaderQuesryResponse = useStaticQuery(graphql`
     query HeaderQuery {
         allMarkdownRemark(filter: {fields: {slug: {nin: ["/404/", "/"]}}}) {
@@ -30,19 +35,31 @@ export default (props: { header: ReactComponentElement<any>, location }) => {
                 id
             }
         }
+        site {
+            siteMetadata {
+                title
+            }
+        }
     }
     `);
 
+    const [hiddenMenu, setHiddenMenu] = useState(true);
+
+    const onMenuClick = () => {
+        setHiddenMenu(!hiddenMenu);
+    }
+
     return (
         <nav
-            className="global-header flex items-center justify-between flex-wrap bg-gray-700 px-6 fixed w-full z-10 top-0">
-            <div className="flex items-center flex-shrink-0 text-white mr-6">
-                <a className="text-white no-underline hover:text-white hover:no-underline" href="#">
-                    <span className="text-2xl pl-2"><i className="em em-grinning"></i>{props.header}</span>
-                </a>
+            className="flex justify-between flex-wrap bg-gray-700 px-6 fixed w-full z-10 top-0">
+
+            {/*Website title*/}
+            <div className="block flex-shrink-0 mr-6 px-4 py-2 text-2xl text-white no-underline hover:text-white">
+                <Link className="header-link-home" to="/">{data.site.siteMetadata.title}</Link>
             </div>
 
-            <div className="block lg:hidden py-3">
+            {/*Menu icon*/}
+            <div className="block lg:hidden py-3" onClick={onMenuClick}>
                 <button id="nav-toggle"
                         className="flex items-center px-3 border rounded text-gray-500 border-gray-600 hover:text-white hover:border-white">
                     <svg className="fill-current h-8 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -52,13 +69,13 @@ export default (props: { header: ReactComponentElement<any>, location }) => {
                 </button>
             </div>
 
-            <div className="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block pt-6 lg:pt-0"
-                 id="nav-content">
+            {/*Menu items*/}
+            <div className={`w-full flex-grow lg:flex lg:items-center lg:w-auto lg:block pt-6 lg:pt-0 ${hiddenMenu ? "hidden" : ""}`} id="nav-content">
                 <ul className="list-reset lg:flex justify-end flex-1 items-center">
                     {data.allMarkdownRemark.nodes.map(node => (
                         <li key={node.id} className="mr-0.75">
                             <Link
-                                className={`inline-block ${node.fields.slug !== location.pathname ? "text-gray-400 hover:text-gray-100" : "text-gray-100" } no-underline hover:text-underline py-4 px-4`}
+                                className={`inline-block ${node.fields.slug !== location.pathname ? "text-gray-400 hover:text-gray-100" : "text-gray-100" } no-underline py-4 px-4`}
                                 to={node.fields.slug}>{node.frontmatter.title}</Link>
                         </li>
                     ))}

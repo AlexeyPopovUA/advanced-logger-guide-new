@@ -19,31 +19,21 @@ type DataProps = {
             description: string;
         }
     }
-    site: {
-        siteMetadata: {
-            title: string;
-        }
-    }
 }
 
 const Template: React.FC<PageProps<DataProps, Context>> = ({ data, location }) => {
     const post = data.markdownRemark;
-    const siteTitle = data.site.siteMetadata.title;
 
     return (
-        <Layout location={location} title={siteTitle}>
+        <Layout location={location}>
             <Seo
                 title={post.frontmatter.title}
                 description={post.frontmatter.description || post.excerpt}
             />
-            <header>
-                <h1 itemProp="headline"
-                    className="font-bold font-sans break-normal text-gray-900 pt-6 pb-2 text-3xl md:text-4xl">{post.frontmatter.title}</h1>
-                <p className="text-sm md:text-base font-normal text-gray-600">{post.frontmatter.date}</p>
-            </header>
-            <div className="mt-2 text-gray-800"
-                 dangerouslySetInnerHTML={{ __html: post.html }}
-            />
+            <h1 itemProp="headline"
+                className="font-bold font-sans break-normal text-gray-900 pt-6 pb-2 text-3xl md:text-4xl">{post.frontmatter.title}</h1>
+            <p className="text-sm md:text-base font-normal text-gray-600">{post.frontmatter.date}</p>
+            <div dangerouslySetInnerHTML={{ __html: post.html }} />
         </Layout>
     );
 };
@@ -60,11 +50,6 @@ query ($id: String!) {
             title
             date(formatString: "MMMM DD, YYYY")
             description
-        }
-    }
-    site {
-        siteMetadata {
-            title
         }
     }
 }
