@@ -30,22 +30,10 @@ const Template: React.FC<PageProps<DataProps, Context>> = ({ data, location }) =
                 title={post.frontmatter.title}
                 description={post.frontmatter.description || post.excerpt}
             />
-            <article
-                className="blog-post"
-                itemScope
-                itemType="http://schema.org/Article"
-            >
-                <header>
-                    <h1 itemProp="headline">{post.frontmatter.title}</h1>
-                </header>
-                <div
-                    dangerouslySetInnerHTML={{ __html: post.html }}
-                />
-                <hr />
-                <footer>
-                    <>nothing</>
-                </footer>
-            </article>
+            <h1 itemProp="headline"
+                className="font-bold font-sans break-normal text-gray-900 pt-6 pb-2 text-3xl md:text-4xl">{post.frontmatter.title}</h1>
+            <p className="text-sm md:text-base font-normal text-gray-600">{post.frontmatter.date}</p>
+            <div dangerouslySetInnerHTML={{ __html: post.html }} />
         </Layout>
     )
 }
