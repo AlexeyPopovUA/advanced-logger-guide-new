@@ -20,7 +20,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     const result = await graphql(
         `
             query AllPages {
-                allMarkdownRemark {
+                allMarkdownRemark (filter: {fileAbsolutePath: {regex: "/.+src\\/pages\\/.+/"}}){
                     nodes {
                         fields {
                             slug
@@ -75,6 +75,13 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
             node,
             value,
         });
+
+        // todo It should replace the slug field
+        createNodeField({
+            name: `filePath`,
+            node,
+            value,
+        });
     }
 }
 
@@ -116,6 +123,7 @@ exports.createSchemaCustomization = ({ actions }) => {
 
     type Fields {
       slug: String
+      filePath: String
     }
   `)
 }
