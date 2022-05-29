@@ -47,11 +47,10 @@ class Template extends React.Component<PageProps<DataProps, Context>, { releases
             <Layout location={location}>
                 <Seo
                     title={post.frontmatter.title}
-                    description={post.frontmatter.description || post.excerpt}
+                    description={post.frontmatter.description}
                 />
                 <h1 itemProp="headline"
                     className="font-bold font-sans break-normal text-gray-900 pt-6 pb-2 text-3xl md:text-4xl">{post.frontmatter.title}</h1>
-                <div dangerouslySetInnerHTML={{ __html: post.html }} />
                 <div dangerouslySetInnerHTML={{ __html: this.state.releasesContent }} />
             </Layout>
         );
@@ -75,7 +74,6 @@ export const pageQuery = graphql`
 query ($id: String!) {
     markdownRemark(id: {eq: $id}) {
         id
-        excerpt(pruneLength: 160)
         html
         frontmatter {
             title
