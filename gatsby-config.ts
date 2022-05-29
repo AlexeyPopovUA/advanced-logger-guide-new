@@ -5,7 +5,7 @@ module.exports = {
             name: `Oleksii Popov`,
             summary: `summary text`,
         },
-        description: `A starter blog demonstrating what Gatsby can do.`,
+        description: `Advanced Logger documentation website`,
         siteUrl: `https://www.advacedlogger.com/`
     },
     plugins: [

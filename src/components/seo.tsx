@@ -46,7 +46,7 @@ const Seo = ({ description, lang, meta, title }) => {
                 },
                 {
                     name: `twitter:card`,
-                    content: `summary`,
+                    content: metaDescription,
                 },
                 {
                     name: `twitter:title`,
