@@ -77,6 +77,7 @@ module.exports = {
         {
             resolve: `gatsby-plugin-postcss`
         },
-        `gatsby-plugin-sass`
+        `gatsby-plugin-sass`,
+        `gatsby-plugin-sitemap`
     ]
 }
