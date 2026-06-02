@@ -9,8 +9,8 @@ Gatsby documentation site for the **advanced-logger** npm package (not the libra
 
 - Content: `src/pages/*.md` with frontmatter `template: <name>` → `src/templates/<name>.tsx`
 - Nav order: `src/settings/nav-menu.md` (`ordering` must match page `title` values)
-- Node 24 via mise (`.mise.toml`); run `mise install` first
-- Run locally: `npm run develop`; verify: `npm run typecheck` and `npm run build`
+- Node 24 via mise (`.mise.toml`); Tailwind v4 in `src/style.css`; React 18 (not 19 — CMS constraint)
+- Verify: `npm run typecheck` → `npm run build` (optional: `node scripts/visual-check.mjs`)
 - Full architecture and pitfalls: see root `AGENTS.md`
 
 Keep changes scoped: doc text in markdown, layout in templates/components, routing in `gatsby-node.ts`.

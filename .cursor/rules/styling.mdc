@@ -1,0 +1,14 @@
+---
+description: Tailwind v4, PostCSS, and global styles
+globs: src/style.css,src/components/**/*.scss,postcss.config.js,gatsby-browser.ts
+alwaysApply: false
+---
+
+# Styling
+
+- Tailwind v4: `@import "tailwindcss"` and `@source` in `src/style.css` (no `tailwind.config.js`).
+- PostCSS plugin: `@tailwindcss/postcss` in `postcss.config.js`.
+- Component SCSS only in `layout.scss`; prefer Tailwind utilities in TSX.
+- Prism CSS imported in `gatsby-browser.ts` for code blocks.
+
+When adding templates/components with new class names, ensure their paths are covered by `@source` in `src/style.css`.

@@ -18,4 +18,4 @@ After adding a page, add its `title` to `src/settings/nav-menu.md` `ordering` if
 
 Templates use GraphQL `pageQuery` with `$id: String!` and wrap content in `Layout` + `Seo`. Copy an existing template before inventing new patterns.
 
-`releases-page` loads CHANGELOG from GitHub at runtime—do not duplicate release notes in markdown unless asked.
+`releases-page` loads CHANGELOG from GitHub and renders with `marked.parse()`—do not duplicate release notes in markdown unless asked.
