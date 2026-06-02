@@ -10,6 +10,7 @@ frontend:
         - node -v
         - npm -v
         - npm ci
+        - npm run clean
     build:
       commands:
         - npm run build
