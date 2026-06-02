@@ -8,12 +8,13 @@ description: Send logs to Sumologic, Loggly, or Elasticsearch using built-in adv
 All examples assume you already imported the API:
 
 ```javascript
-const { AdvancedLogger, service, strategy } =
-    require("advanced-logger").advancedLogger
+const { AdvancedLogger, service, strategy } = require("advanced-logger")
 // browser: const { AdvancedLogger, service, strategy } = window.advancedLogger
 ```
 
-The module ships **Sumologic**, **Loggly**, **Elasticsearch**, and **Console** services out of the box. Remote services extend `BaseRemoteService` and send logs over HTTP via axios.
+The module ships **Sumologic**, **Loggly**, **Elasticsearch**, and **Console** services out of the box. Remote services extend `BaseRemoteService` and send logs over HTTP via native **`fetch`**.
+
+HTTP **4xx/5xx responses throw** (so `retryAttempts` / `retryInterval` on `serviceConfig` can retry). Network failures reject as usual.
 
 ### Sumologic (see https://www.sumologic.com/)
 
@@ -152,8 +153,7 @@ Extend `service.BaseRemoteService` and override as needed:
 Full Node example: [custom-http-service.js](https://github.com/AlexeyPopovUA/advanced-logger/blob/master/example/node/custom-http-service.js).
 
 ```javascript
-const { AdvancedLogger, service, strategy } =
-    require("advanced-logger").advancedLogger
+const { AdvancedLogger, service, strategy } = require("advanced-logger")
 
 const defaultLogConfig = {
     BuildVersion: 123,

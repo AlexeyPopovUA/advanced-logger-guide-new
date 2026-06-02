@@ -19,24 +19,23 @@ npm ci
 
 ## Build
 
-Full webpack build (node + browser, production + debug):
+The library is bundled with [tsup](https://tsup.egoist.dev/) (`npm run build`):
 
 ```bash
 npm run build
 ```
 
-Outputs:
+Outputs under `dist/`:
 
-- `dist/browser/` and `dist/browser-debug/` — browser bundles
-- `dist/node/` and `dist/node-debug/` — Node bundles
+- `index.mjs` — ESM
+- `index.cjs` — CommonJS
+- `index.d.ts` — TypeScript declarations
+- `index.global.js` — browser IIFE (`window.advancedLogger`)
 
-Targeted builds:
+Local watch mode:
 
 ```bash
-npm run build-prod-browser
-npm run build-prod-node
-npm run build-dev-browser
-npm run build-dev-node
+npm run build:watch
 ```
 
 ## Tests
@@ -44,12 +43,12 @@ npm run build-dev-node
 ```bash
 npm run type-check        # TypeScript
 npm test                  # unit tests (import from src/)
-npm run test:integration  # dev build + runtime tests (Node entry + browser UMD)
+npm run test:integration  # build + runtime tests (CJS + browser IIFE)
 npm run test:all          # unit + integration
 npm run coverage          # unit tests with coverage (CI on master)
 ```
 
-**Jest** runs two projects: `unit` (source specs) and `runtime` (built artifacts via `main-node.js` / `window.advancedLogger`). Open `coverage/lcov-report/index.html` after `npm run coverage`.
+**Jest** runs two projects: `unit` (source specs) and `runtime` (built `dist/index.cjs` and `window.advancedLogger` from the IIFE). Open `coverage/lcov-report/index.html` after `npm run coverage`.
 
 Call `logger.destroy()` in tests when using interval or throttle strategies.
 

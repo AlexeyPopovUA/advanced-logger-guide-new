@@ -2,52 +2,51 @@
 title: Getting started
 date: "2022-05-29T22:12:03.284Z"
 template: regular-static-page
-description: Install advanced-logger and axios, then configure and send your first logs from Node.js or the browser.
+description: Install advanced-logger and configure your first logs from Node.js or the browser using native fetch.
 ---
 
 ### Add to the project
 
-Axios is a required peer dependency (currently **1.13.x**). It is not bundled into the logger package, so you must install it alongside `advanced-logger`.
+Version **4.x** has **no peer dependencies**. HTTP uses the platform's native **`fetch`**; lodash throttle and safe JSON stringify are bundled inside the package.
 
 ```shell
-npm i --save advanced-logger axios
+npm i --save advanced-logger
 ```
 
-The published package exposes the API on an **`advancedLogger`** property (webpack library name). Use the pattern that matches your runtime:
+The API is exported as **top-level named exports**. Use the pattern that matches your runtime:
+
+#### ESM (recommended)
+
+```javascript
+import {
+    AdvancedLogger,
+    service,
+    strategy,
+    TransformationEnum,
+} from "advanced-logger"
+```
 
 #### Node.js (CommonJS)
 
 ```javascript
-const { AdvancedLogger, service, strategy } =
-    require("advanced-logger").advancedLogger
+const { AdvancedLogger, service, strategy } = require("advanced-logger")
 ```
 
-#### Browser (CDN script tags)
+#### Browser (CDN script tag)
 
 ```html
-<!-- minified -->
-<script src="https://cdn.jsdelivr.net/npm/axios@latest/dist/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/advanced-logger@latest/dist/browser/advanced-logger.browser.min.js"></script>
-<!-- dev / debug -->
-<script src="https://cdn.jsdelivr.net/npm/axios@latest/dist/axios.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/advanced-logger@latest/dist/browser-debug/advanced-logger.browser.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/advanced-logger@latest/dist/index.global.js"></script>
 ```
 
 ```javascript
 const { AdvancedLogger, service, strategy } = window.advancedLogger
 ```
 
+The script-tag global **`window.advancedLogger`** is unchanged from v3. Node and bundlers no longer use a `.advancedLogger` property on the module export.
+
 #### TypeScript
 
-Types ship at `dist/src/index.d.ts`. For runtime in Node, still use `.advancedLogger` as above. You can import types separately:
-
-```typescript
-import type {} from /* types from package */ "advanced-logger"
-const { AdvancedLogger, service, strategy } =
-    require("advanced-logger").advancedLogger
-```
-
-Named ESM imports such as `import { AdvancedLogger } from "advanced-logger"` do not match the CommonJS bundle export shape and may fail at runtime unless your bundler re-exports the library.
+Type declarations ship as `dist/index.d.ts` (package `"types"` field). ESM named imports work with the published `exports` map.
 
 ### Configuration
 
@@ -93,8 +92,7 @@ logger.log({ test: "instant log u3" })
 #### Node.js example
 
 ```javascript
-const { AdvancedLogger, service, strategy } =
-    require("advanced-logger").advancedLogger
+const { AdvancedLogger, service, strategy } = require("advanced-logger")
 
 const defaultLogConfig = {
     Channel: "my-company",
@@ -123,6 +121,10 @@ logger.log({ test: "instant log from node" })
 
 More runnable samples live in the [advanced-logger `example/` folder](https://github.com/AlexeyPopovUA/advanced-logger/tree/master/example).
 
+### HTTP errors
+
+Remote services use **`fetch`**. Unlike axios, `fetch` does not reject on HTTP error status codes, so the library **throws on non-2xx responses** to preserve retry behavior. Failed sends are logged with `console.error` inside `AdvancedLogger`. Use `retryAttempts` and `retryInterval` on `serviceConfig`, or add your own monitoring, if you need stronger guarantees.
+
 ### Lifecycle
 
 Strategies that use timers or throttling (for example `OnIntervalStrategy`) register listeners until torn down. When you are done with a logger instance, call:
@@ -133,10 +135,51 @@ logger.destroy()
 
 Use this in single-page app teardown, test `afterEach` hooks, and long-running workers.
 
+### Runtime requirements
+
+- **Node.js 18+** for global `fetch` (library development and CI use **Node.js 24+**)
+- **Browser** — modern browsers with native `fetch` and ES2015+ (IIFE bundle)
+
 ### Upgrading between breaking changes
+
+#### 3.x to 4.x
+
+Version 4 replaces webpack bundles with **tsup** (ESM + CJS + browser IIFE) and removes **axios** in favor of native **`fetch`**.
+
+1. **No more `.advancedLogger` on `require`/`import`.** Use top-level named exports (see above). `window.advancedLogger` for script tags is unchanged.
+2. **Remove axios** from dependencies and from browser `<script>` tags.
+3. **Non-2xx HTTP responses now reject** so retries still run. Plan error handling accordingly.
+4. **CDN URL** is `dist/index.global.js` (not `dist/browser/advanced-logger.browser.min.js`).
+
+Uninstall axios:
+
+```shell
+npm uninstall axios
+```
+
+Node / bundlers:
+
+```javascript
+// Before (3.x)
+const { AdvancedLogger, service, strategy } =
+    require("advanced-logger").advancedLogger
+
+// After (4.x)
+const { AdvancedLogger, service, strategy } = require("advanced-logger")
+```
+
+Browser script tags:
+
+```html
+<!-- Before (3.x) -->
+<script src="https://cdn.jsdelivr.net/npm/axios@latest/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/advanced-logger@latest/dist/browser/advanced-logger.browser.min.js"></script>
+
+<!-- After (4.x) -->
+<script src="https://cdn.jsdelivr.net/npm/advanced-logger@latest/dist/index.global.js"></script>
+```
 
 #### 2.x to 3.x
 
-- Install **axios** as a peer dependency (or keep it if already present).
-- The library targets **ES2015**. If you need older browsers or Node versions, transpile your app and add necessary **polyfills**.
-- Library development and CI use **Node.js 24+** (`engines.node` in package.json). Consumers on older Node may still run the ES2015 bundles if their environment supports them.
+- Install **axios** as a peer dependency (removed again in 4.x).
+- The library targeted **ES2015**. Transpile and polyfill if you need older runtimes.

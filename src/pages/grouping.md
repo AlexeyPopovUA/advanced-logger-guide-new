@@ -19,8 +19,12 @@ Pass a `transformations` array when you create `AdvancedLogger`. The built-in `T
 ### Example
 
 ```javascript
-const { AdvancedLogger, service, strategy, TransformationEnum } =
-    require("advanced-logger").advancedLogger
+const {
+    AdvancedLogger,
+    service,
+    strategy,
+    TransformationEnum,
+} = require("advanced-logger")
 
 const logger = new AdvancedLogger({
     service: new service.ConsoleService(),

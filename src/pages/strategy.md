@@ -8,7 +8,7 @@ description: Control when logs are sent with instant, interval, bundle-size, and
 Strategies decide **when** buffered logs are flushed to the configured service. Each strategy exposes an `eventEmitter` and emits `"send"` when it is time to post logs.
 
 ```javascript
-const { strategy } = require("advanced-logger").advancedLogger
+const { strategy } = require("advanced-logger")
 ```
 
 Built-in strategies:

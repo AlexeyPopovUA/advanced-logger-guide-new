@@ -20,7 +20,7 @@ It supports any format of logs via a custom serializer.
 1. You call `logger.log(payload)` with any object shape.
 2. **LogStore** buffers logs and can apply transformations (for example rapid-fire grouping).
 3. A **strategy** listens for new logs and emits `send` when it is time to flush.
-4. The configured **service** serializes the batch and posts it (HTTP via axios for remote services).
+4. The configured **service** serializes the batch and posts it (HTTP via native **`fetch`** for remote services).
 
 See [Getting started](/getting-started/) for installation and [Service](/service/) / [Strategy](/strategy/) for built-in plugins.
 
@@ -42,10 +42,10 @@ Runnable examples: [advanced-logger `example/`](https://github.com/AlexeyPopovUA
 
 ## Runtime environment support
 
-Builds are ES2015 bundles for Node and browser.
+The package ships dual **ESM** (`dist/index.mjs`) and **CommonJS** (`dist/index.cjs`) builds, type declarations (`dist/index.d.ts`), and a browser **IIFE** global (`dist/index.global.js`). It has **no runtime npm dependencies** (lodash throttle and safe stringify are bundled in).
 
-- **Node.js** — developed and tested on **Node.js 24+** (see library `.mise.toml`)
-- **Browser** — modern browsers with ES2015 support; consumers on older targets should transpile and polyfill
+- **Node.js** — **18+** for global `fetch`; developed and tested on **Node.js 24+** (see library `.mise.toml`)
+- **Browser** — modern browsers with native `fetch` and ES2015+; consumers on older targets should transpile and polyfill
 
 ## Links
 
