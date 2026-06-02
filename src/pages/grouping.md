@@ -12,13 +12,15 @@ Logs that share the same identity fields can be grouped within a time window so 
 Pass a `transformations` array when you create `AdvancedLogger`. The built-in `TransformationEnum.RAPID_FIRE_GROUPING` transformation:
 
 - Compares logs using **`groupIdentityFields`** (field names that define a duplicate log)
-- Writes **`groupFieldName`** on each log with how many matching events arrived in the interval
-- Finalizes counts every **`interval`** milliseconds
+- Keeps **one representative log** in the buffer per identity; duplicates increment an internal counter
+- Writes **`groupFieldName`** on that log when the group finalizes (throttled by **`interval`** milliseconds)
+- Flushes pending group state when logs are read for send (`getAll()`)
 
 ### Example
 
 ```javascript
-const { AdvancedLogger, service, strategy, TransformationEnum } = require("advanced-logger");
+const { AdvancedLogger, service, strategy, TransformationEnum } =
+    require("advanced-logger").advancedLogger
 
 const logger = new AdvancedLogger({
     service: new service.ConsoleService(),
@@ -33,10 +35,13 @@ const logger = new AdvancedLogger({
             },
         },
     ],
-});
+})
 
-logger.log({ Message: "User clicked", Category: "UI" });
-logger.log({ Message: "User clicked", Category: "UI" });
+logger.log({ Message: "User clicked", Category: "UI" })
+logger.log({ Message: "User clicked", Category: "UI" })
+// After send: representative log includes RepeatCount for matching events in the window
+
+logger.destroy()
 ```
 
 When logs are sent, grouped entries include `RepeatCount` (or your chosen field name) reflecting how many matching logs arrived during the interval.

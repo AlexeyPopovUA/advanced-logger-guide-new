@@ -5,26 +5,31 @@ template: regular-static-page
 description: Send logs to Sumologic, Loggly, or Elasticsearch using built-in advanced-logger service adapters.
 ---
 
-Currently, module supports Sumologic, Loggly and Elastic search services out of the box.
+All examples assume you already imported the API:
+
+```javascript
+const { AdvancedLogger, service, strategy } =
+    require("advanced-logger").advancedLogger
+// browser: const { AdvancedLogger, service, strategy } = window.advancedLogger
+```
+
+The module ships **Sumologic**, **Loggly**, **Elasticsearch**, and **Console** services out of the box. Remote services extend `BaseRemoteService` and send logs over HTTP via axios.
 
 ### Sumologic (see https://www.sumologic.com/)
 
+`serviceConfig` must include `url`, `method`, `sourceCategory`, `host`, and `sourceName`. The service sets Sumologic headers (`X-Sumo-Category`, `X-Sumo-Host`, `X-Sumo-Name`) and `Content-Type: application/json`.
+
 ```javascript
-//Configuration for communication with Sumologic.
-//Url should be taken from the logger's source category configuration page.
 const serviceConfig = {
-    url: "https://www.google.nl",
+    url: "https://your-sumologic-http-collector-url",
     sourceName: "advancedLoggerTest",
     host: "advanced-logger",
     sourceCategory: "MY/SUMO/namespace",
     method: "POST",
 }
 
-//Default log configuration.
-//It is used like a template with default values for each new log.
-//Can be of any structure. It will be shallowly copied during creation of a new log record.
 const defaultLogConfig = {
-    UserAgent: window.userAgent,
+    UserAgent: typeof navigator !== "undefined" ? navigator.userAgent : "",
     BuildVersion: 123,
     Platform: "browser",
     Severity: "DEBUG",
@@ -34,86 +39,80 @@ const defaultLogConfig = {
     Category: "",
 }
 
-//general config
 const config = { serviceConfig, defaultLogConfig }
 
-const sService = new service.SumologicService(config)
+const sumoService = new service.SumologicService(config)
 ```
 
 ### Loggly (see https://www.loggly.com/)
 
 ```javascript
-//Configuration for communication with Loggly.
-//Url should be taken from the logger's source category configuration page.
 const serviceConfig = {
-    // this should be the url for **bulk** log sending
     url: "https://logs-01.loggly.com/bulk/<customertoken>/tag/bulk/",
     method: "POST",
 }
 
-//Default log configuration.
-//It is used like a template with default values for each new log.
-//Can be of any structure. It will be shallowly copied during creation of a new log record.
 const defaultLogConfig = {
-    UserAgent: window.userAgent,
     BuildVersion: 123,
     Platform: "browser",
     Severity: "DEBUG",
-    Data: "",
-    Timestamp: "",
     Message: "",
     Category: "",
 }
 
-//general config
 const config = { serviceConfig, defaultLogConfig }
 
-const lService = new service.LogglyService(config)
+const logglyService = new service.LogglyService(config)
 ```
 
-### Elastic Search Service (see https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-gsg-upload-data.html)
+### Elasticsearch (see https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html)
 
-Logger supports sending data to Elasticsearch service endpoint. It was tested on AWS-based instance of Elasticsearch and Kibana. Ideally, it should work also on instance of any other cloud provider.
+Sends **bulk NDJSON**: for each log, one index-metadata line and one document line. Tested on AWS OpenSearch / Elasticsearch; should work on other providers that accept the bulk API.
+
+`logMetaIndexField` names the field on each log object used for `_index` in the metadata line. If omitted, the default field name is **`Index`**.
 
 ```javascript
-//Configuration for communication with Elastic Search.
-//Url should be taken from the logger's source category configuration page.
 const serviceConfig = {
-    // this should be the url for **bulk** log sending
     url: "https://<endpoint_url>/_bulk",
     method: "POST",
-    //this field will be used to send index value in meta information for each log
     logMetaIndexField: "IndexField",
 }
 
-//Default log configuration.
-//It is used like a template with default values for each new log.
-//Can be of any structure. It will be shallowly copied during creation of a new log record.
 const defaultLogConfig = {
     BuildVersion: 123,
     Platform: "browser",
     Severity: "DEBUG",
-    Data: "",
-    Timestamp: "",
     Message: "",
     IndexField: "web-app",
 }
 
-//general config
 const config = { serviceConfig, defaultLogConfig }
 
 const esService = new service.ElasticsearchService(config)
 ```
 
+### HTTP retries
+
+Any remote service can retry failed requests via `serviceConfig`:
+
+```javascript
+const serviceConfig = {
+    url: "https://example.com/logs",
+    method: "POST",
+    retryAttempts: 3,
+    retryInterval: 1000,
+}
+```
+
 ### Custom serializer
 
-There are situations when you need a "special" representation of logs instead of JSON before sending them to remote storage. For example, key-value pairs:
+Use a custom `serializer` on the service config when you need a format other than safe JSON. The function receives a single log object and must return a **string**.
+
+Example output shape:
 
 ```
 [Timestamp=1234567890] [Message="test message"] [Category="MyController"]
 ```
-
-In order to serialize logs in your own way, you can use `serializer` configuration with services:
 
 ```javascript
 const serializer = logObject =>
@@ -122,57 +121,61 @@ const serializer = logObject =>
         .join(" ")
 
 const configWithSerializer = { serviceConfig, defaultLogConfig, serializer }
-const testLogs = [{ test: "test123" }, { test: "test321" }]
 
-service = new LogglyService(configWithSerializer)
+const logglyService = new service.LogglyService(configWithSerializer)
 ```
 
-### Console log service (for debugging purposes)
+By default, `BaseRemoteService` joins serialized lines with newlines in `preparePayload`.
 
-TODO
+### Console service (for debugging)
+
+Writes prepared logs to `console.log`. Pair with `OnRequestStrategy` and call `sendAllLogs()` when you want to flush.
+
+```javascript
+const logger = new AdvancedLogger({
+    service: new service.ConsoleService(),
+    strategy: new strategy.OnRequestStrategy(),
+})
+
+logger.log({ Message: "debug event" })
+logger.sendAllLogs()
+```
 
 ### Custom implementation of service
 
-You can implement your own service. Here is an example of extending BaseRemoteService class for implementation of http service that sends logs in json form:
+Extend `service.BaseRemoteService` and override as needed:
+
+- **`preparePayload(logs)`** — batch body (default: newline-joined serialized lines)
+- **`serializer(log)`** — per-log encoding (default: safe JSON via `fast-safe-stringify`)
+- **`getHeaders()`** — request headers
+
+Full Node example: [custom-http-service.js](https://github.com/AlexeyPopovUA/advanced-logger/blob/master/example/node/custom-http-service.js).
 
 ```javascript
+const { AdvancedLogger, service, strategy } =
+    require("advanced-logger").advancedLogger
+
 const defaultLogConfig = {
     BuildVersion: 123,
     Platform: "nodejs",
-    Severity: "LogLevel.DEBUG",
-    Data: "",
-    Timestamp: "",
-    Exception: "",
+    Severity: "DEBUG",
     Message: "",
     Category: "",
 }
 
 const serviceConfig = {
-    //todo Replace with a real URL
-    url: "https://www.google.nl",
+    url: "https://your-log-endpoint",
     method: "POST",
 }
 
 const config = { serviceConfig, defaultLogConfig }
 
 class CustomHttpService extends service.BaseRemoteService {
-    /**
-     * @override
-     */
-    constructor(config) {
-        console.log("constructor", config)
-        return super(config)
-    }
-
-    /**
-     * @override
-     */
     preparePayload(logs) {
         const resultList = logs.map(log => ({
             ...this.defaultLogConfig,
             ...log,
         }))
-        console.log("preparePayload", resultList)
         return Promise.resolve(this.serializer(resultList))
     }
 }
@@ -181,4 +184,10 @@ const logger = new AdvancedLogger({
     service: new CustomHttpService(config),
     strategy: new strategy.OnRequestStrategy(),
 })
+
+logger.log({ test: "custom service log" })
+logger.sendAllLogs()
+logger.destroy()
 ```
+
+For non-HTTP sinks, implement `IService` directly (`sendAllLogs`, `preparePayload`, `serializer`, `destroy`).

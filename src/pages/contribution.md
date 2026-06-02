@@ -5,24 +5,32 @@ template: regular-static-page
 description: Build, test, and contribute to the advanced-logger open-source npm package.
 ---
 
-## Development
+This page describes contributing to the **[advanced-logger](https://github.com/AlexeyPopovUA/advanced-logger)** npm library. To change **this documentation site**, edit the [advanced-logger-guide](https://github.com/AlexeyPopovUA/advanced-logger-guide) repository instead.
 
-### Build and debugging
+## Prerequisites
 
-In order to run full build of all bundles run:
+- **Node.js 24+** (see library [`.mise.toml`](https://github.com/AlexeyPopovUA/advanced-logger/blob/master/.mise.toml))
+
+```bash
+mise install   # optional: install Node via mise
+cd advanced-logger
+npm ci
+```
+
+## Build
+
+Full webpack build (node + browser, production + debug):
 
 ```bash
 npm run build
 ```
 
-This script will create all types of build:
+Outputs:
 
--   browser compressed
--   browser debugging
--   nodejs compressed (do we need it? :) )
--   nodejs debugging
+- `dist/browser/` and `dist/browser-debug/` — browser bundles
+- `dist/node/` and `dist/node-debug/` — Node bundles
 
-Also, you can run a specific build for each platform separately:
+Targeted builds:
 
 ```bash
 npm run build-prod-browser
@@ -31,52 +39,45 @@ npm run build-dev-browser
 npm run build-dev-node
 ```
 
-For debugging purposes it should be convenient to use the watch mode:
+## Tests
 
 ```bash
-npm run watch-prod-browser
-npm run watch-prod-node
-npm run watch-dev-browser
-npm run watch-dev-node
+npm run type-check        # TypeScript
+npm test                  # unit tests (import from src/)
+npm run test:integration  # dev build + runtime tests (Node entry + browser UMD)
+npm run test:all          # unit + integration
+npm run coverage          # unit tests with coverage (CI on master)
 ```
 
-### Running tests
+**Jest** runs two projects: `unit` (source specs) and `runtime` (built artifacts via `main-node.js` / `window.advancedLogger`). Open `coverage/lcov-report/index.html` after `npm run coverage`.
 
-In order to run unit tests run:
+Call `logger.destroy()` in tests when using interval or throttle strategies.
+
+## CI
+
+[GitHub Actions](https://github.com/AlexeyPopovUA/advanced-logger/actions) on every branch: type-check, unit tests, full build, runtime integration. `master` also runs coverage and SonarCloud.
+
+## Releasing
+
+On `master`, bump version and changelog with standard-version:
 
 ```bash
-npm run test
+npm run release
+git push origin master --follow-tags
 ```
 
-In order to run unit tests with coverage run:
+Release commits are tagged; npm publish follows your existing release pipeline for tagged commits on `master`.
 
-```bash
-npm run coverage
-```
+## Git workflow
 
-It will build a beautiful code coverage report which you can check by running html file `coverage/lcov-report/index.html`.
+### Commits
 
-### Releasing
+Follow [Conventional Commits](https://www.conventionalcommits.org/). Commitlint runs on commit via Husky.
 
-There is a "feature branches" support implemented in Travis CI. Commit checks are visible in commits and pull requests in GitHub.
+### Branches and pull requests
 
-In order to release a new version you need to create a version tag and push it to master via next scripts:
+Use feature branches and open PRs to `master`. Keep history clean (rebase when appropriate). All CI checks should pass; resolve or discuss Sonar findings.
 
-```bash
-npm run release # creates a new release commit
-git push origin master --follow-tags # pushes a release commit to master branch including version tag
-```
+## AI / contributor notes
 
-This command bumps up the library version, builds the changelog and makes a new commit with a "version" tag. Using this tag travis will prepare and publish the npm package.
-
-**Please note**, that release happens only on master branch for a tagged commit.
-
-### Git workflow
-
-#### Commits
-
-Commits should follow the "conventional commit" agreement. It will be validated by Husky plugin on pre-commit git hook.
-
-#### Branches and pull requests
-
-Feel free to do anything you want in branches. All final commits should be rebased and clean. Please, create pull request for delivering your changes to master. All PR checks should be green. All sonar suggestions should be resolved and/or discussed if not applicable.
+See [`AGENTS.md`](https://github.com/AlexeyPopovUA/advanced-logger/blob/master/AGENTS.md) in the library repo for architecture, extension points, and testing conventions.

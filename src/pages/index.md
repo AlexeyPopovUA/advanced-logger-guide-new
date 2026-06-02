@@ -7,42 +7,51 @@ description: Documentation for advanced-logger, an extendable isomorphic TypeScr
 
 ## What is it?
 
-It is an extendable isomorphic log sending library written in TypeScript for javascript application in nodejs and browsers.
+It is an extendable isomorphic log sending library written in TypeScript for JavaScript applications in Node.js and browsers.
 
 It can be extended with custom strategy ("when to send logs") and service ("where to send logs").
 
-It does not restrict you with conventions, for example, existence of "logSeverity", "ErrorId" or "message" fields in log.
+It does not restrict you with conventions, for example, existence of `logSeverity`, `ErrorId`, or `message` fields in a log.
 
-It supports any format of logs via custom serializer.
+It supports any format of logs via a custom serializer.
+
+## How it works
+
+1. You call `logger.log(payload)` with any object shape.
+2. **LogStore** buffers logs and can apply transformations (for example rapid-fire grouping).
+3. A **strategy** listens for new logs and emits `send` when it is time to flush.
+4. The configured **service** serializes the batch and posts it (HTTP via axios for remote services).
+
+See [Getting started](/getting-started/) for installation and [Service](/service/) / [Strategy](/strategy/) for built-in plugins.
 
 ## Features
 
--   It works in browsers and nodejs
--   It is able to send single logs and bundles of them to an external logger
--   It supports different log sending strategies:
-    1.  interval (for example, every 10 seconds)
-    2.  :on request (only when you ask)
-    3.  mixed ("interval" + "on request") (will be done soon)
-    4.  on bundle size (for example, sends bundles of 100 logs)
-    5.  instant (received 1 log -> sent 1 log)
--   It is able to group duplicated logs in certain time interval (for rapid fire of the same logs)
--   It is not afraid of circular links in log objects
--   It supports custom format for logs (custom serializer)
--   It supports different remote logger endpoints (SumoLogic, Loggly and Elasticsearch). Who is the next? ᕙ(ಠ.ಠ)ᕗ
+- Works in browsers and Node.js
+- Sends single logs or bundles to external endpoints
+- Log sending strategies:
+    1. **Interval** — throttle flushes while logs arrive (default 15s)
+    2. **On request** — flush only when you call `sendAllLogs()`
+    3. **On bundle size** — flush when the buffer reaches N logs (default 100)
+    4. **Instant** — one log in, one send out
+- Groups duplicate logs in a time window (rapid-fire grouping)
+- Handles circular references in log objects (`fast-safe-stringify`)
+- Custom per-log serialization
+- Built-in remote endpoints: Sumo Logic, Loggly, Elasticsearch, plus console debugging
+
+Runnable examples: [advanced-logger `example/`](https://github.com/AlexeyPopovUA/advanced-logger/tree/master/example).
 
 ## Runtime environment support
 
-Builds are generated as ES2015 bundles for nodejs and browser environments.
+Builds are ES2015 bundles for Node and browser.
 
-NodeJS - tested on latest lts
-
-Browser - all latest browsers, that support ES2015 JS.
+- **Node.js** — developed and tested on **Node.js 24+** (see library `.mise.toml`)
+- **Browser** — modern browsers with ES2015 support; consumers on older targets should transpile and polyfill
 
 ## Links
 
-**[NPM package link](https://www.npmjs.com/package/advanced-logger "NPM package link")**
+**[NPM package](https://www.npmjs.com/package/advanced-logger)**
 
-**[GitHub link](https://github.com/AlexeyPopovUA/advanced-logger "GitHub link")**
+**[GitHub repository](https://github.com/AlexeyPopovUA/advanced-logger)**
 
 [![Feature branch build](https://github.com/AlexeyPopovUA/advanced-logger/actions/workflows/feature-branch-build.yml/badge.svg)](https://github.com/AlexeyPopovUA/advanced-logger/actions/workflows/feature-branch-build.yml)
 [![npm version](https://badge.fury.io/js/advanced-logger.svg)](https://badge.fury.io/js/advanced-logger)
