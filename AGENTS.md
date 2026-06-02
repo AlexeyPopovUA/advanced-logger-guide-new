@@ -7,8 +7,9 @@ Guidance for AI coding assistants working in this repository.
 Documentation website for the **[advanced-logger](https://www.npmjs.com/package/advanced-logger)** npm library (isomorphic TypeScript logging for Node.js and browsers). This repo is **not** the logger library itself—that lives at [AlexeyPopovUA/advanced-logger](https://github.com/AlexeyPopovUA/advanced-logger).
 
 - **Live site:** https://www.advancedlogger.com
-- **Stack:** Gatsby (v5 “next”), React 17, TypeScript/TSX, Tailwind CSS, SCSS, Netlify CMS
-- **Hosting:** AWS Amplify (`amplify.yml`); CI also runs on GitHub Actions (Node 16)
+- **Stack:** Gatsby 5.16, React 18, TypeScript/TSX, Tailwind CSS, SCSS, Netlify CMS
+- **Node.js:** 24 (via [mise](https://mise.jdx.dev/) — see `.mise.toml`)
+- **Hosting:** AWS Amplify (`amplify.yml`); CI on GitHub Actions (Node 24)
 
 ## Repository layout
 
@@ -25,11 +26,13 @@ Documentation website for the **[advanced-logger](https://www.npmjs.com/package/
 ## Commands
 
 ```bash
-npm ci          # install (use in CI / clean env)
+mise install    # Node 24 from .mise.toml
+npm ci          # install (use in CI / clean env; legacy-peer-deps via .npmrc)
 npm run develop # local dev server (alias: npm start)
 npm run build   # production static build → public/
 npm run serve   # preview production build
 npm run clean   # clear Gatsby cache
+npm run typecheck  # tsc --noEmit
 npm run format  # Prettier on js/ts/tsx/json/md
 npm run local-cms  # Netlify CMS proxy for local editing
 ```
