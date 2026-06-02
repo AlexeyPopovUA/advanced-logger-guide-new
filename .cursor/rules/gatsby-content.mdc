@@ -1,0 +1,21 @@
+---
+description: Markdown pages, templates, and Gatsby node/config
+globs: src/pages/**/*.md,src/templates/**/*.tsx,src/settings/**/*.md,gatsby-*.ts
+alwaysApply: false
+---
+
+# Pages and templates
+
+Required frontmatter for new pages under `src/pages/`:
+
+```yaml
+title: Page Title
+date: "ISO-8601"
+template: regular-static-page  # must match src/templates/<template>.tsx
+```
+
+After adding a page, add its `title` to `src/settings/nav-menu.md` `ordering` if it should appear in the nav.
+
+Templates use GraphQL `pageQuery` with `$id: String!` and wrap content in `Layout` + `Seo`. Copy an existing template before inventing new patterns.
+
+`releases-page` loads CHANGELOG from GitHub at runtime—do not duplicate release notes in markdown unless asked.

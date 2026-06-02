@@ -1,0 +1,12 @@
+---
+description: Shared React components and styles
+globs: src/components/**/*.{tsx,scss}
+alwaysApply: false
+---
+
+# Components
+
+- Use functional components and existing imports (`Layout`, `Seo`, `Link` from `gatsby`).
+- Styling: Tailwind utility classes; component SCSS only in `layout.scss`.
+- `nav-menu.tsx`: menu order comes from GraphQL + `nav-menu.md`—do not hardcode link lists in the component.
+- Avoid adding dependencies for small UI changes.

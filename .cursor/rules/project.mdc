@@ -1,0 +1,15 @@
+---
+description: Advanced Logger docs site — core context for all tasks
+alwaysApply: true
+---
+
+# Project context
+
+Gatsby documentation site for the **advanced-logger** npm package (not the library source).
+
+- Content: `src/pages/*.md` with frontmatter `template: <name>` → `src/templates/<name>.tsx`
+- Nav order: `src/settings/nav-menu.md` (`ordering` must match page `title` values)
+- Run locally: `npm run develop`; verify: `npm run build`
+- Full architecture and pitfalls: see root `AGENTS.md`
+
+Keep changes scoped: doc text in markdown, layout in templates/components, routing in `gatsby-node.ts`.
