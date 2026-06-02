@@ -2,6 +2,7 @@
 title: About
 date: "2022-05-29T22:12:03.284Z"
 template: regular-static-page
+description: Documentation for advanced-logger, an extendable isomorphic TypeScript logging library for Node.js and browsers.
 ---
 
 ## What is it?

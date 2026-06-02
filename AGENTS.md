@@ -140,4 +140,4 @@ Do **not** implement logger library features here unless explicitly asked—poin
 - SEO uses **Gatsby Head** (`SeoHead` in `src/components/seo.tsx`), not `react-helmet`.
 - **`graphql` override** (`^16.14.1` in `package.json`) keeps a single GraphQL version for Gatsby + Decap; removing it can break `gatsby build` schema generation.
 - Direct **`ajv@8`** dependency is required for webpack/`ajv-keywords` resolution; do not remove without verifying `npm run build`.
-- Site metadata typo in config: `siteUrl` uses `advacedlogger.com` (missing “n”)—fix only if intentional site change is requested.
+- `siteUrl` in `gatsby-config.ts` must match the live domain (`https://www.advancedlogger.com`) for sitemap and canonical URLs.

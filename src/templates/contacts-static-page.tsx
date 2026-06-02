@@ -74,12 +74,13 @@ const Template: React.FC<PageProps<DataProps, Context>> = ({ data, location }) =
 
 export default Template;
 
-export const Head = ({ data }: HeadProps<DataProps, Context>) => {
+export const Head = ({ data, location }: HeadProps<DataProps, Context>) => {
     const post = data.markdownRemark;
     return (
         <SeoHead
             title={post.frontmatter.title}
             description={post.frontmatter.description}
+            pathname={location.pathname}
         />
     );
 };

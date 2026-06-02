@@ -2,6 +2,7 @@
 title: Getting started
 date: "2022-05-29T22:12:03.284Z"
 template: regular-static-page
+description: Install advanced-logger and axios, then configure and send your first logs from Node.js or the browser.
 ---
 
 ### Add to the project

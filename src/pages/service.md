@@ -2,6 +2,7 @@
 title: Service
 date: "2022-05-29T22:12:03.284Z"
 template: regular-static-page
+description: Send logs to Sumologic, Loggly, or Elasticsearch using built-in advanced-logger service adapters.
 ---
 
 Currently, module supports Sumologic, Loggly and Elastic search services out of the box.

@@ -2,6 +2,7 @@
 title: Strategy
 date: "2022-05-29T22:12:03.284Z"
 template: regular-static-page
+description: Control when logs are sent with instant, interval, bundle-size, and on-request strategies.
 ---
 
 Strategies are components that "know" when is it right time to send logs.

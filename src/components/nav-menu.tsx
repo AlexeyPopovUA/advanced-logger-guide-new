@@ -75,10 +75,12 @@ export default (props) => {
 
             {/*Menu icon*/}
             <div className="block lg:hidden py-3" onClick={onMenuClick}>
-                <button id="nav-toggle"
-                        className="flex items-center px-3 border rounded text-gray-500 border-gray-600 hover:text-white hover:border-white">
-                    <svg className="fill-current h-8 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <title>Menu</title>
+                <button
+                    id="nav-toggle"
+                    type="button"
+                    aria-label="Open navigation menu"
+                    className="flex items-center px-3 border rounded text-gray-500 border-gray-600 hover:text-white hover:border-white">
+                    <svg className="fill-current h-8 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                         <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
                     </svg>
                 </button>

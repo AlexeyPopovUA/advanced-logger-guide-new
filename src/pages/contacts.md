@@ -9,5 +9,5 @@ twitter: http://twitter.com/Alexej_Popov
 template: contacts-static-page
 email: alexejpopovua@gmail.com
 linkedin: https://www.linkedin.com/in/oleksii-popov-9747a255/
-description: My contact information and social networks links
+description: Contact Oleksii Popov and find links to email, GitHub, and social profiles.
 ---

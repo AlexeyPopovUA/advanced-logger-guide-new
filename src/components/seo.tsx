@@ -12,12 +12,25 @@ export type SeoProps = {
     description?: string;
     lang?: string;
     meta?: SeoMeta[];
+    pathname?: string;
+};
+
+const normalizeSiteUrl = (siteUrl: string) => siteUrl.replace(/\/$/, "");
+
+const buildCanonicalUrl = (siteUrl: string, pathname: string) => {
+    const base = normalizeSiteUrl(siteUrl);
+    if (pathname === "/" || pathname === "") {
+        return `${base}/`;
+    }
+    const path = pathname.startsWith("/") ? pathname : `/${pathname}`;
+    return `${base}${path.endsWith("/") ? path : `${path}/`}`;
 };
 
 export const SeoHead: React.FC<SeoProps> = ({
     description = "",
     lang = "en",
     meta = [],
+    pathname,
     title,
 }) => {
     const { site } = useStaticQuery(
@@ -27,6 +40,7 @@ export const SeoHead: React.FC<SeoProps> = ({
                     siteMetadata {
                         title
                         description
+                        siteUrl
                     }
                 }
             }
@@ -36,21 +50,30 @@ export const SeoHead: React.FC<SeoProps> = ({
     const metaDescription = description || site.siteMetadata.description;
     const defaultTitle = site.siteMetadata?.title;
     const pageTitle = defaultTitle ? `${title} | ${defaultTitle}` : title;
+    const canonicalUrl =
+        pathname && site.siteMetadata.siteUrl
+            ? buildCanonicalUrl(site.siteMetadata.siteUrl, pathname)
+            : undefined;
 
     const defaultMeta: SeoMeta[] = [
         { name: "description", content: metaDescription },
-        { property: "og:title", content: title },
+        { property: "og:title", content: pageTitle },
         { property: "og:description", content: metaDescription },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary" },
-        { name: "twitter:title", content: title },
+        { name: "twitter:title", content: pageTitle },
         { name: "twitter:description", content: metaDescription },
     ];
+
+    if (canonicalUrl) {
+        defaultMeta.push({ property: "og:url", content: canonicalUrl });
+    }
 
     return (
         <>
             <html lang={lang} />
             <title>{pageTitle}</title>
+            {canonicalUrl ? <link rel="canonical" href={canonicalUrl} /> : null}
             {[...defaultMeta, ...meta].map((entry) => {
                 const key = entry.name || entry.property;
                 if (entry.name) {
