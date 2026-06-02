@@ -1,12 +1,28 @@
 import * as React from "react";
-import * as PropTypes from "prop-types";
-import { Helmet } from "react-helmet";
 import { useStaticQuery, graphql } from "gatsby";
 
-const Seo = ({ description, lang, meta, title }) => {
+export type SeoMeta = {
+    name?: string;
+    property?: string;
+    content: string;
+};
+
+export type SeoProps = {
+    title: string;
+    description?: string;
+    lang?: string;
+    meta?: SeoMeta[];
+};
+
+export const SeoHead: React.FC<SeoProps> = ({
+    description = "",
+    lang = "en",
+    meta = [],
+    title,
+}) => {
     const { site } = useStaticQuery(
         graphql`
-            query {
+            query SeoSiteMetadata {
                 site {
                     siteMetadata {
                         title
@@ -15,63 +31,35 @@ const Seo = ({ description, lang, meta, title }) => {
                 }
             }
         `
-    )
+    );
 
-    const metaDescription = description || site.siteMetadata.description
-    const defaultTitle = site.siteMetadata?.title
+    const metaDescription = description || site.siteMetadata.description;
+    const defaultTitle = site.siteMetadata?.title;
+    const pageTitle = defaultTitle ? `${title} | ${defaultTitle}` : title;
+
+    const defaultMeta: SeoMeta[] = [
+        { name: "description", content: metaDescription },
+        { property: "og:title", content: title },
+        { property: "og:description", content: metaDescription },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: metaDescription },
+    ];
 
     return (
-        <Helmet
-            htmlAttributes={{
-                lang,
-            }}
-            title={title}
-            titleTemplate={defaultTitle ? `%s | ${defaultTitle}` : null}
-            meta={[
-                {
-                    name: `description`,
-                    content: metaDescription,
-                },
-                {
-                    property: `og:title`,
-                    content: title,
-                },
-                {
-                    property: `og:description`,
-                    content: metaDescription,
-                },
-                {
-                    property: `og:type`,
-                    content: `website`,
-                },
-                {
-                    name: `twitter:card`,
-                    content: metaDescription,
-                },
-                {
-                    name: `twitter:title`,
-                    content: title,
-                },
-                {
-                    name: `twitter:description`,
-                    content: metaDescription,
-                },
-            ].concat(meta)}
-        />
-    )
-}
-
-Seo.defaultProps = {
-    lang: `en`,
-    meta: [],
-    description: ``,
-}
-
-Seo.propTypes = {
-    description: PropTypes.string,
-    lang: PropTypes.string,
-    meta: PropTypes.arrayOf(PropTypes.object),
-    title: PropTypes.string.isRequired,
-}
-
-export default Seo
+        <>
+            <html lang={lang} />
+            <title>{pageTitle}</title>
+            {[...defaultMeta, ...meta].map((entry) => {
+                const key = entry.name || entry.property;
+                if (entry.name) {
+                    return <meta key={key} name={entry.name} content={entry.content} />;
+                }
+                return (
+                    <meta key={key} property={entry.property} content={entry.content} />
+                );
+            })}
+        </>
+    );
+};

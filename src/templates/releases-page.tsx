@@ -1,9 +1,9 @@
 import * as React from "react";
-import { graphql, PageProps } from "gatsby";
+import { graphql, PageProps, HeadProps } from "gatsby";
 import { marked } from "marked";
 
 import Layout from "../components/layout";
-import Seo from "../components/seo";
+import { SeoHead } from "../components/seo";
 
 type Context = {
     id: string;
@@ -45,10 +45,6 @@ class Template extends React.Component<PageProps<DataProps, Context>, { releases
 
         return (
             <Layout location={location}>
-                <Seo
-                    title={post.frontmatter.title}
-                    description={post.frontmatter.description}
-                />
                 <h1 itemProp="headline"
                     className="font-bold font-sans break-normal text-gray-900 pt-6 pb-2 text-3xl md:text-4xl">{post.frontmatter.title}</h1>
                 <div dangerouslySetInnerHTML={{ __html: this.state.releasesContent }} />
@@ -69,6 +65,16 @@ const fetchReleases = async () => {
 };
 
 export default Template;
+
+export const Head = ({ data }: HeadProps<DataProps, Context>) => {
+    const post = data.markdownRemark;
+    return (
+        <SeoHead
+            title={post.frontmatter.title}
+            description={post.frontmatter.description}
+        />
+    );
+};
 
 export const pageQuery = graphql`
 query ($id: String!) {

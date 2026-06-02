@@ -1,8 +1,8 @@
 import * as React from "react";
-import { graphql, PageProps } from "gatsby";
+import { graphql, PageProps, HeadProps } from "gatsby";
 
 import Layout from "../components/layout";
-import Seo from "../components/seo";
+import { SeoHead } from "../components/seo";
 
 type Context = {
     id: string;
@@ -26,10 +26,6 @@ const Template: React.FC<PageProps<DataProps, Context>> = ({ data, location }) =
 
     return (
         <Layout location={location}>
-            <Seo
-                title={post.frontmatter.title}
-                description={post.frontmatter.description || post.excerpt}
-            />
             <h1 itemProp="headline"
                 className="font-bold font-sans break-normal text-gray-900 pt-6 pb-2 text-3xl md:text-4xl">{post.frontmatter.title}</h1>
             <div dangerouslySetInnerHTML={{ __html: post.html }} />
@@ -38,6 +34,16 @@ const Template: React.FC<PageProps<DataProps, Context>> = ({ data, location }) =
 }
 
 export default Template;
+
+export const Head = ({ data }: HeadProps<DataProps, Context>) => {
+    const post = data.markdownRemark;
+    return (
+        <SeoHead
+            title={post.frontmatter.title}
+            description={post.frontmatter.description || post.excerpt}
+        />
+    );
+};
 
 export const pageQuery = graphql`
 query ($id: String!) {

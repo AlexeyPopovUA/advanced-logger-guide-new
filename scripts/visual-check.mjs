@@ -10,6 +10,7 @@ const pages = [
     { name: "getting-started", path: "/getting-started/" },
     { name: "contacts", path: "/contacts/" },
     { name: "releases", path: "/releases/" },
+    { name: "admin", path: "/admin/", h1: false },
 ];
 
 await mkdir(outDir, { recursive: true });
@@ -19,15 +20,25 @@ const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
 
 const results = [];
 
-for (const { name, path: pagePath } of pages) {
+for (const { name, path: pagePath, h1 = true } of pages) {
     const url = `${baseUrl}${pagePath}`;
     const response = await page.goto(url, { waitUntil: "load", timeout: 60000 });
-    await page.waitForSelector("nav.bg-gray-700", { timeout: 15000 });
-    await page.waitForSelector("h1", { timeout: 15000 });
+    const isAdmin = name === "admin";
+
+    if (isAdmin) {
+        await page.waitForSelector("#nc-root", { timeout: 60000 });
+    } else {
+        await page.waitForSelector("nav.bg-gray-700", { timeout: 15000 });
+        if (h1) {
+            await page.waitForSelector("h1", { timeout: 15000 });
+        }
+    }
 
     const title = await page.title();
-    const hasNav = (await page.locator("nav.bg-gray-700").count()) > 0;
-    const hasH1 = (await page.locator("h1").count()) > 0;
+    const hasNav = isAdmin
+        ? true
+        : (await page.locator("nav.bg-gray-700").count()) > 0;
+    const hasH1 = !h1 || (await page.locator("h1").count()) > 0;
 
     await page.screenshot({ path: path.join(outDir, `${name}.png`), fullPage: true });
 
@@ -45,9 +56,11 @@ await browser.close();
 
 console.log(JSON.stringify(results, null, 2));
 
-const failed = results.filter(
-    (r) => r.status !== 200 || !r.hasNav || !r.hasH1 || !r.title
-);
+const failed = results.filter((r) => {
+    if (r.status !== 200 || !r.title) return true;
+    if (r.name === "admin") return false;
+    return !r.hasNav || !r.hasH1;
+});
 
 if (failed.length) {
     process.exit(1);

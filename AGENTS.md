@@ -7,7 +7,7 @@ Guidance for AI coding assistants working in this repository.
 Documentation website for the **[advanced-logger](https://www.npmjs.com/package/advanced-logger)** npm library (isomorphic TypeScript logging for Node.js and browsers). This repo is **not** the logger library itself—that lives at [AlexeyPopovUA/advanced-logger](https://github.com/AlexeyPopovUA/advanced-logger).
 
 - **Live site:** https://www.advancedlogger.com
-- **Stack:** Gatsby 5.16, React 18, TypeScript 6, Tailwind CSS v4, SCSS, Netlify CMS
+- **Stack:** Gatsby 5.16, React 19, TypeScript 6, Tailwind CSS v4, SCSS, Decap CMS
 - **Node.js:** 24 (via [mise](https://mise.jdx.dev/) — see `.mise.toml`)
 - **Hosting:** AWS Amplify (`amplify.yml`, **Amazon Linux 2023** build image required for Node 24); CI on GitHub Actions (Node 24)
 
@@ -136,6 +136,8 @@ Do **not** implement logger library features here unless explicitly asked—poin
 - `template` in markdown must match an existing file in `src/templates/`.
 - Nav `ordering` entries must match page `title` strings exactly.
 - `releases-page` depends on network access to GitHub raw `CHANGELOG.md`.
-- **React 19 is not supported** — `gatsby-plugin-netlify-cms` copies React UMD bundles; stay on React 18 until CMS is migrated (e.g. Decap).
+- **Decap CMS** uses `gatsby-plugin-decap-cms` with `customizeWebpackConfig` to bundle CMS + React (no UMD script tags). Verify `/admin` after CMS or React upgrades.
+- SEO uses **Gatsby Head** (`SeoHead` in `src/components/seo.tsx`), not `react-helmet`.
+- **`graphql` override** (`^16.14.1` in `package.json`) keeps a single GraphQL version for Gatsby + Decap; removing it can break `gatsby build` schema generation.
 - Direct **`ajv@8`** dependency is required for webpack/`ajv-keywords` resolution; do not remove without verifying `npm run build`.
 - Site metadata typo in config: `siteUrl` uses `advacedlogger.com` (missing “n”)—fix only if intentional site change is requested.

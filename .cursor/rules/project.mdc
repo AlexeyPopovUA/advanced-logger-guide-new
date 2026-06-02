@@ -9,7 +9,7 @@ Gatsby documentation site for the **advanced-logger** npm package (not the libra
 
 - Content: `src/pages/*.md` with frontmatter `template: <name>` → `src/templates/<name>.tsx`
 - Nav order: `src/settings/nav-menu.md` (`ordering` must match page `title` values)
-- Node 24 via mise (`.mise.toml`); Tailwind v4 in `src/style.css`; React 18 (not 19 — CMS constraint)
+- Node 24 via mise (`.mise.toml`); Tailwind v4 in `src/style.css`; React 19; Decap CMS (`gatsby-plugin-decap-cms`)
 - Verify: `npm run typecheck` → `npm run build` (optional: `node scripts/visual-check.mjs`)
 - Full architecture and pitfalls: see root `AGENTS.md`
 

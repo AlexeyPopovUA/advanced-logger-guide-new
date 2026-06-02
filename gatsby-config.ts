@@ -9,7 +9,24 @@ module.exports = {
         siteUrl: `https://www.advacedlogger.com/`
     },
     plugins: [
-        "gatsby-plugin-netlify-cms",
+        {
+            resolve: "gatsby-plugin-decap-cms",
+            options: {
+                enableIdentityWidget: false,
+                customizeWebpackConfig: (config) => {
+                    // Bundle Decap + React in cms.js instead of UMD script tags
+                    // (React 19 has no official UMD; prebuilt decap UMD mismatches versions).
+                    config.externals = [];
+                    config.plugins = config.plugins.filter((plugin) => {
+                        const name = plugin?.constructor?.name;
+                        return (
+                            name !== "CopyPlugin" &&
+                            name !== "HtmlWebpackTagsPlugin"
+                        );
+                    });
+                },
+            },
+        },
         `gatsby-plugin-image`,
         {
             resolve: `gatsby-source-filesystem`,
@@ -70,7 +87,6 @@ module.exports = {
                 icon: `src/images/book.svg`, // This path is relative to the root of the site.
             },
         },
-        `gatsby-plugin-react-helmet`,
         // this (optional) plugin enables Progressive Web App + Offline functionality
         // To learn more, visit: https://gatsby.dev/offline
         // `gatsby-plugin-offline`,
