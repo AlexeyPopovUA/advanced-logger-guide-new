@@ -9,7 +9,7 @@ Documentation website for the **[advanced-logger](https://www.npmjs.com/package/
 - **Live site:** https://www.advancedlogger.com
 - **Stack:** Gatsby 5.16, React 18, TypeScript/TSX, Tailwind CSS, SCSS, Netlify CMS
 - **Node.js:** 24 (via [mise](https://mise.jdx.dev/) — see `.mise.toml`)
-- **Hosting:** AWS Amplify (`amplify.yml`); CI on GitHub Actions (Node 24)
+- **Hosting:** AWS Amplify (`amplify.yml`, **Amazon Linux 2023** build image required for Node 24); CI on GitHub Actions (Node 24)
 
 ## Repository layout
 
