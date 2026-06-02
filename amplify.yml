@@ -1,4 +1,8 @@
 version: 0.1
+env:
+  variables:
+    GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES: true
+    CI: true
 frontend:
   phases:
     preBuild:
@@ -16,5 +20,5 @@ frontend:
   cache:
     paths:
       - ~/.npm
-      - .cache
-      - /opt/google/**/*
+      - .cache/**/*
+      - public/**/*

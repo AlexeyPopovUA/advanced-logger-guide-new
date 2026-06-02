@@ -127,8 +127,8 @@ Do **not** implement logger library features here unless explicitly asked—poin
 
 ## Deployment
 
-- **Amplify:** `npm ci` → `npm run build`; artifacts from `public/`.
-- **GitHub Actions:** `.github/workflows/feature-branch-build.yml` on push (skips commits containing `(skip-ci)`).
+- **Amplify:** `npm ci` → `npm run build`; artifacts from `public/`. Build cache: `~/.npm`, `.cache`, `public` (not `node_modules` — `npm ci` wipes it). Incremental builds: `GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES=true`.
+- **GitHub Actions:** `.github/workflows/feature-branch-build.yml` on push (skips commits containing `(skip-ci)`). Caches npm via `setup-node` and Gatsby `.cache`/`public` via `actions/cache`.
 - CMS commits may use `chore(skip-ci):` for media-only updates.
 
 ## Pitfalls

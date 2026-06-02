@@ -16,15 +16,24 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v4
 
       - name: Install runtime
         uses: actions/setup-node@v4
         with:
           node-version: '24'
           cache: npm
+
+      - name: Cache Gatsby
+        uses: actions/cache@v4
+        with:
+          path: |
+            .cache
+            public
+          key: gatsby-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ github.run_id }}
+          restore-keys: |
+            gatsby-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-
+            gatsby-${{ runner.os }}-
 
       - name: Install
         run: npm ci
@@ -34,3 +43,6 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES: true
+          CI: true
