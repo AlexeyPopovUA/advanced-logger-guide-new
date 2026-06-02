@@ -1,6 +1,6 @@
 import * as React from "react";
 import { graphql, PageProps } from "gatsby";
-import { parse } from "marked";
+import { marked } from "marked";
 
 import Layout from "../components/layout";
 import Seo from "../components/seo";
@@ -35,7 +35,7 @@ class Template extends React.Component<PageProps<DataProps, Context>, { releases
         const resp = await fetchReleases();
 
         this.setState({
-            releasesContent: parse(resp)
+            releasesContent: marked.parse(resp) as string,
         });
     }
 

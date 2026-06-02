@@ -24,26 +24,27 @@
         "gatsby-source-filesystem": "^5.16.0",
         "gatsby-transformer-remark": "^6.16.0",
         "gatsby-transformer-sharp": "^5.16.0",
-        "marked": "^4.3.0",
+        "marked": "^18.0.4",
         "netlify-cms-app": "^2.15.72",
-        "prismjs": "^1.29.0",
+        "prismjs": "^1.30.0",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-helmet": "^6.1.0",
-        "tailwindcss": "^3.4.17"
+        "tailwindcss": "^4.3.0"
     },
     "devDependencies": {
-        "@types/node": "^24.0.0",
-        "@types/react": "^18.3.0",
-        "@types/react-dom": "^18.3.0",
-        "autoprefixer": "^10.4.21",
+        "@tailwindcss/postcss": "^4.3.0",
+        "@types/node": "^25.9.1",
+        "@types/react": "^18.3.28",
+        "@types/react-dom": "^18.3.7",
+        "autoprefixer": "^10.5.0",
         "gatsby-plugin-postcss": "^6.16.0",
         "gatsby-plugin-sass": "^6.16.0",
         "gatsby-plugin-sitemap": "^6.16.0",
-        "postcss": "^8.5.3",
-        "prettier": "^3.5.3",
-        "sass": "^1.86.0",
-        "typescript": "^5.8.3"
+        "postcss": "^8.5.15",
+        "prettier": "^3.8.3",
+        "sass": "^1.100.0",
+        "typescript": "^6.0.3"
     },
     "homepage": "https://github.com/gatsbyjs/gatsby-starter-blog#readme",
     "keywords": [
