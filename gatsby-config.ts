@@ -6,24 +6,24 @@ module.exports = {
             summary: `summary text`,
         },
         description: `Documentation for advanced-logger, an extendable isomorphic TypeScript logging library for Node.js and browsers.`,
-        siteUrl: `https://www.advancedlogger.com`
+        siteUrl: `https://www.advancedlogger.com`,
     },
     plugins: [
         {
             resolve: "gatsby-plugin-decap-cms",
             options: {
                 enableIdentityWidget: false,
-                customizeWebpackConfig: (config) => {
+                customizeWebpackConfig: config => {
                     // Bundle Decap + React in cms.js instead of UMD script tags
                     // (React 19 has no official UMD; prebuilt decap UMD mismatches versions).
-                    config.externals = [];
-                    config.plugins = config.plugins.filter((plugin) => {
-                        const name = plugin?.constructor?.name;
+                    config.externals = []
+                    config.plugins = config.plugins.filter(plugin => {
+                        const name = plugin?.constructor?.name
                         return (
                             name !== "CopyPlugin" &&
                             name !== "HtmlWebpackTagsPlugin"
-                        );
-                    });
+                        )
+                    })
                 },
             },
         },
@@ -68,10 +68,10 @@ module.exports = {
         `gatsby-transformer-sharp`,
         `gatsby-plugin-sharp`,
         {
-          resolve: `gatsby-plugin-google-analytics`,
-          options: {
-            trackingId: `UA-127711409-4`,
-          },
+            resolve: `gatsby-plugin-google-analytics`,
+            options: {
+                trackingId: `UA-127711409-4`,
+            },
         },
         {
             resolve: `gatsby-plugin-manifest`,
@@ -91,9 +91,14 @@ module.exports = {
         // To learn more, visit: https://gatsby.dev/offline
         // `gatsby-plugin-offline`,
         {
-            resolve: `gatsby-plugin-postcss`
+            resolve: `gatsby-plugin-postcss`,
         },
         `gatsby-plugin-sass`,
-        `gatsby-plugin-sitemap`
-    ]
+        {
+            resolve: `gatsby-plugin-sitemap`,
+            options: {
+                excludes: [`/404/`, `/404.html`],
+            },
+        },
+    ],
 }

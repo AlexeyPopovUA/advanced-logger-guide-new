@@ -1,92 +1,105 @@
-import * as React from "react";
-import { graphql, PageProps, HeadProps } from "gatsby";
-import { marked } from "marked";
+import * as React from "react"
+import { graphql, PageProps, HeadProps } from "gatsby"
+import { marked } from "marked"
 
-import Layout from "../components/layout";
-import { SeoHead } from "../components/seo";
+import Layout from "../components/layout"
+import { SeoHead } from "../components/seo"
 
 type Context = {
-    id: string;
-};
+    id: string
+}
 
 type DataProps = {
     markdownRemark: {
-        id: string;
-        excerpt: string;
-        html: string;
+        id: string
+        excerpt: string
+        html: string
         frontmatter: {
-            date: string;
-            title: string;
-            description: string;
+            date: string
+            title: string
+            description: string
         }
     }
 }
 
-class Template extends React.Component<PageProps<DataProps, Context>, { releasesContent: string }> {
+class Template extends React.Component<
+    PageProps<DataProps, Context>,
+    { releasesContent: string }
+> {
     constructor(props) {
-        super(props);
+        super(props)
 
         this.state = {
-            releasesContent: ""
-        };
+            releasesContent: "",
+        }
     }
 
     async componentDidMount() {
-        const resp = await fetchReleases();
+        const resp = await fetchReleases()
 
         this.setState({
             releasesContent: marked.parse(resp) as string,
-        });
+        })
     }
 
     render() {
-        let { data, location } = this.props;
-        const post = data.markdownRemark;
+        let { data, location } = this.props
+        const post = data.markdownRemark
 
         return (
             <Layout location={location}>
-                <h1 itemProp="headline"
-                    className="font-bold font-sans break-normal text-gray-900 pt-6 pb-2 text-3xl md:text-4xl">{post.frontmatter.title}</h1>
-                <div dangerouslySetInnerHTML={{ __html: this.state.releasesContent }} />
+                <h1
+                    itemProp="headline"
+                    className="font-bold font-sans break-normal text-gray-900 pt-6 pb-2 text-3xl md:text-4xl"
+                >
+                    {post.frontmatter.title}
+                </h1>
+                <div
+                    dangerouslySetInnerHTML={{
+                        __html: this.state.releasesContent,
+                    }}
+                />
             </Layout>
-        );
+        )
     }
 }
 
 const fetchReleases = async () => {
     try {
-        const response = await fetch("https://raw.githubusercontent.com/AlexeyPopovUA/advanced-logger/master/CHANGELOG.md");
-        return response.text();
+        const response = await fetch(
+            "https://raw.githubusercontent.com/AlexeyPopovUA/advanced-logger/master/CHANGELOG.md",
+        )
+        return response.text()
     } catch (e) {
-        console.error(e);
+        console.error(e)
     }
 
-    return "";
-};
+    return ""
+}
 
-export default Template;
+export default Template
 
 export const Head = ({ data, location }: HeadProps<DataProps, Context>) => {
-    const post = data.markdownRemark;
+    const post = data.markdownRemark
     return (
         <SeoHead
             title={post.frontmatter.title}
             description={post.frontmatter.description}
             pathname={location.pathname}
         />
-    );
-};
+    )
+}
 
 export const pageQuery = graphql`
-query ($id: String!) {
-    markdownRemark(id: {eq: $id}) {
-        id
-        html
-        frontmatter {
-            title
-            date(formatString: "MMMM DD, YYYY")
-            description
+    query ($id: String!) {
+        markdownRemark(id: { eq: $id }) {
+            id
+            html
+            frontmatter {
+                title
+                date(formatString: "MMMM DD, YYYY")
+                description
+            }
         }
     }
-}
-`;
+`

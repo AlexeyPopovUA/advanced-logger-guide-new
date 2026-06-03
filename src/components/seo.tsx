@@ -1,30 +1,30 @@
-import * as React from "react";
-import { useStaticQuery, graphql } from "gatsby";
+import * as React from "react"
+import { useStaticQuery, graphql } from "gatsby"
 
 export type SeoMeta = {
-    name?: string;
-    property?: string;
-    content: string;
-};
+    name?: string
+    property?: string
+    content: string
+}
 
 export type SeoProps = {
-    title: string;
-    description?: string;
-    lang?: string;
-    meta?: SeoMeta[];
-    pathname?: string;
-};
+    title: string
+    description?: string
+    lang?: string
+    meta?: SeoMeta[]
+    pathname?: string
+}
 
-const normalizeSiteUrl = (siteUrl: string) => siteUrl.replace(/\/$/, "");
+const normalizeSiteUrl = (siteUrl: string) => siteUrl.replace(/\/$/, "")
 
 const buildCanonicalUrl = (siteUrl: string, pathname: string) => {
-    const base = normalizeSiteUrl(siteUrl);
+    const base = normalizeSiteUrl(siteUrl)
     if (pathname === "/" || pathname === "") {
-        return `${base}/`;
+        return `${base}/`
     }
-    const path = pathname.startsWith("/") ? pathname : `/${pathname}`;
-    return `${base}${path.endsWith("/") ? path : `${path}/`}`;
-};
+    const path = pathname.startsWith("/") ? pathname : `/${pathname}`
+    return `${base}${path.endsWith("/") ? path : `${path}/`}`
+}
 
 export const SeoHead: React.FC<SeoProps> = ({
     description = "",
@@ -33,27 +33,25 @@ export const SeoHead: React.FC<SeoProps> = ({
     pathname,
     title,
 }) => {
-    const { site } = useStaticQuery(
-        graphql`
-            query SeoSiteMetadata {
-                site {
-                    siteMetadata {
-                        title
-                        description
-                        siteUrl
-                    }
+    const { site } = useStaticQuery(graphql`
+        query SeoSiteMetadata {
+            site {
+                siteMetadata {
+                    title
+                    description
+                    siteUrl
                 }
             }
-        `
-    );
+        }
+    `)
 
-    const metaDescription = description || site.siteMetadata.description;
-    const defaultTitle = site.siteMetadata?.title;
-    const pageTitle = defaultTitle ? `${title} | ${defaultTitle}` : title;
+    const metaDescription = description || site.siteMetadata.description
+    const defaultTitle = site.siteMetadata?.title
+    const pageTitle = defaultTitle ? `${title} | ${defaultTitle}` : title
     const canonicalUrl =
         pathname && site.siteMetadata.siteUrl
             ? buildCanonicalUrl(site.siteMetadata.siteUrl, pathname)
-            : undefined;
+            : undefined
 
     const defaultMeta: SeoMeta[] = [
         { name: "description", content: metaDescription },
@@ -63,10 +61,10 @@ export const SeoHead: React.FC<SeoProps> = ({
         { name: "twitter:card", content: "summary" },
         { name: "twitter:title", content: pageTitle },
         { name: "twitter:description", content: metaDescription },
-    ];
+    ]
 
     if (canonicalUrl) {
-        defaultMeta.push({ property: "og:url", content: canonicalUrl });
+        defaultMeta.push({ property: "og:url", content: canonicalUrl })
     }
 
     return (
@@ -74,15 +72,25 @@ export const SeoHead: React.FC<SeoProps> = ({
             <html lang={lang} />
             <title>{pageTitle}</title>
             {canonicalUrl ? <link rel="canonical" href={canonicalUrl} /> : null}
-            {[...defaultMeta, ...meta].map((entry) => {
-                const key = entry.name || entry.property;
+            {[...defaultMeta, ...meta].map(entry => {
+                const key = entry.name || entry.property
                 if (entry.name) {
-                    return <meta key={key} name={entry.name} content={entry.content} />;
+                    return (
+                        <meta
+                            key={key}
+                            name={entry.name}
+                            content={entry.content}
+                        />
+                    )
                 }
                 return (
-                    <meta key={key} property={entry.property} content={entry.content} />
-                );
+                    <meta
+                        key={key}
+                        property={entry.property}
+                        content={entry.content}
+                    />
+                )
             })}
         </>
-    );
-};
+    )
+}

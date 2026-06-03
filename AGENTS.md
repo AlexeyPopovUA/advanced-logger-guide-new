@@ -13,17 +13,17 @@ Documentation website for the **[advanced-logger](https://www.npmjs.com/package/
 
 ## Repository layout
 
-| Path | Purpose |
-|------|---------|
-| `src/pages/*.md` | Markdown content; each file becomes a Gatsby page |
-| `src/templates/*.tsx` | Page templates selected via frontmatter `template` |
-| `src/components/` | Shared UI (`layout`, `nav-menu`, `footer`, `seo`) |
-| `src/settings/nav-menu.md` | Site title and nav item order |
-| `static/admin/config.yml` | Netlify CMS collections and Git backend |
-| `gatsby-node.ts` | Page creation, slug fields, GraphQL schema customization |
-| `gatsby-config.ts` | Plugins, filesystem sources, site metadata |
-| `gatsby-types.d.ts` | TypeScript declarations for CSS/SCSS imports |
-| `scripts/visual-check.mjs` | Optional Playwright screenshot/check script |
+| Path                       | Purpose                                                  |
+| -------------------------- | -------------------------------------------------------- |
+| `src/pages/*.md`           | Markdown content; each file becomes a Gatsby page        |
+| `src/templates/*.tsx`      | Page templates selected via frontmatter `template`       |
+| `src/components/`          | Shared UI (`layout`, `nav-menu`, `footer`, `seo`)        |
+| `src/settings/nav-menu.md` | Site title and nav item order                            |
+| `static/admin/config.yml`  | Netlify CMS collections and Git backend                  |
+| `gatsby-node.ts`           | Page creation, slug fields, GraphQL schema customization |
+| `gatsby-config.ts`         | Plugins, filesystem sources, site metadata               |
+| `gatsby-types.d.ts`        | TypeScript declarations for CSS/SCSS imports             |
+| `scripts/visual-check.mjs` | Optional Playwright screenshot/check script              |
 
 ## Commands
 
@@ -64,12 +64,12 @@ description: Optional SEO description
 
 ### Templates in use
 
-| `template` value | File | Notes |
-|------------------|------|--------|
-| `regular-static-page` | `regular-static-page.tsx` | Default docs layout; body from remark HTML |
-| `contacts-static-page` | `contacts-static-page.tsx` | Extra frontmatter: `email`, `github`, social links, `author` |
-| `releases-page` | `releases-page.tsx` | Fetches `CHANGELOG.md` from GitHub; renders with `marked.parse()` |
-| `404-page` | `404-page.tsx` | Custom 404 |
+| `template` value       | File                       | Notes                                                             |
+| ---------------------- | -------------------------- | ----------------------------------------------------------------- |
+| `regular-static-page`  | `regular-static-page.tsx`  | Default docs layout; body from remark HTML                        |
+| `contacts-static-page` | `contacts-static-page.tsx` | Extra frontmatter: `email`, `github`, social links, `author`      |
+| `releases-page`        | `releases-page.tsx`        | Fetches `CHANGELOG.md` from GitHub; renders with `marked.parse()` |
+| `404-page`             | `404-page.tsx`             | Custom 404                                                        |
 
 New templates: add `src/templates/my-template.tsx` and reference `template: my-template` in frontmatter. Match existing patterns: `Layout`, `Seo`, GraphQL `pageQuery` with `$id: String!`.
 
@@ -79,9 +79,9 @@ Order is **not** alphabetical. Edit `src/settings/nav-menu.md`:
 
 ```yaml
 ordering:
-  - Getting started
-  - Service
-  # ... titles must match page frontmatter `title` exactly
+    - Getting started
+    - Service
+    # ... titles must match page frontmatter `title` exactly
 ```
 
 `src/components/nav-menu.tsx` maps `ordering` titles to slugs from `allMarkdownRemark`. Home (`/`) and `/404/` are excluded from the menu.
@@ -105,14 +105,14 @@ Prefer Tailwind utility classes in components; avoid unrelated global CSS change
 
 ## What to change where
 
-| Task | Where to edit |
-|------|----------------|
-| Doc copy / examples | `src/pages/*.md` |
-| Nav labels or order | `src/settings/nav-menu.md` |
-| Header/footer/chrome | `src/components/` |
-| Page layout / GraphQL | `src/templates/` |
-| Site title, URL, plugins | `gatsby-config.ts` |
-| Routing / slugs / schema | `gatsby-node.ts` |
+| Task                     | Where to edit              |
+| ------------------------ | -------------------------- |
+| Doc copy / examples      | `src/pages/*.md`           |
+| Nav labels or order      | `src/settings/nav-menu.md` |
+| Header/footer/chrome     | `src/components/`          |
+| Page layout / GraphQL    | `src/templates/`           |
+| Site title, URL, plugins | `gatsby-config.ts`         |
+| Routing / slugs / schema | `gatsby-node.ts`           |
 
 Do **not** implement logger library features here unless explicitly asked—point users to the advanced-logger repo.
 

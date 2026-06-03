@@ -1,9 +1,9 @@
-import * as React from "react";
+import * as React from "react"
 
-import Footer from "./footer";
-import NavMenu from "./nav-menu";
+import Footer from "./footer"
+import NavMenu from "./nav-menu"
 
-import "./layout.scss";
+import "./layout.scss"
 
 const Layout = ({ location, children }) => (
     <>
@@ -15,6 +15,6 @@ const Layout = ({ location, children }) => (
         </article>
         <Footer />
     </>
-);
+)
 
-export default Layout;
+export default Layout
