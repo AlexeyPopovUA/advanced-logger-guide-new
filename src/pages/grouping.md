@@ -28,7 +28,7 @@ const {
 
 const logger = new AdvancedLogger({
     service: new service.ConsoleService(),
-    strategy: new strategy.OnIntervalStrategy({ interval: 5000 }),
+    strategy: new strategy.HybridStrategy({ maxBundle: 100, interval: 5000 }),
     transformations: [
         {
             type: TransformationEnum.RAPID_FIRE_GROUPING,
@@ -50,4 +50,4 @@ logger.destroy()
 
 When logs are sent, grouped entries include `RepeatCount` (or your chosen field name) reflecting how many matching logs arrived during the interval.
 
-Grouping runs in the log store before your strategy sends logs to the configured service. Pair it with [interval or bundle-size strategies](/strategy/) when you expect bursts of identical messages.
+Grouping runs in the log store before your strategy sends logs to the configured service. Pair it with [HybridStrategy](/strategy/), or with interval or bundle-size strategies, when you expect bursts of identical messages.

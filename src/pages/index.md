@@ -32,7 +32,8 @@ See [Getting started](/getting-started/) for installation and [Service](/service
     1. **Interval** — throttle flushes while logs arrive (default 15s)
     2. **On request** — flush only when you call `sendAllLogs()`
     3. **On bundle size** — flush when the buffer reaches N logs (default 100)
-    4. **Instant** — one log in, one send out
+    4. **Hybrid** — flush on bundle size or interval (default 100 logs / 15s)
+    5. **Instant** — one log in, one send out
 - Groups duplicate logs in a time window (rapid-fire grouping)
 - Handles circular references in log objects (`fast-safe-stringify`)
 - Custom per-log serialization

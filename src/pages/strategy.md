@@ -2,7 +2,7 @@
 title: Strategy
 date: "2022-05-29T22:12:03.284Z"
 template: regular-static-page
-description: Control when logs are sent with instant, interval, bundle-size, and on-request strategies.
+description: Control when logs are sent with instant, interval, bundle-size, hybrid, and on-request strategies.
 ---
 
 Strategies decide **when** buffered logs are flushed to the configured service. Each strategy exposes an `eventEmitter` and emits `"send"` when it is time to post logs.
@@ -16,6 +16,7 @@ Built-in strategies:
 - **InstantStrategy** — send on every `log()`
 - **OnBundleSizeStrategy** — send when the buffer reaches `maxBundle`
 - **OnIntervalStrategy** — throttle sends while logs are arriving
+- **HybridStrategy** — send when the buffer reaches `maxBundle` or the interval throttle fires
 - **OnRequestStrategy** — send only when you call `logger.sendAllLogs()`
 
 ### InstantStrategy
@@ -42,6 +43,21 @@ Optional `interval` in milliseconds (default **15000**). Uses lodash **throttle*
 
 ```javascript
 const intervalStrategy = new strategy.OnIntervalStrategy({
+    interval: 10000,
+})
+```
+
+Call `logger.destroy()` when disposing a logger that uses this strategy (cancels the throttle timer).
+
+### HybridStrategy
+
+Combines **OnBundleSizeStrategy** and **OnIntervalStrategy**: flush when the buffer reaches `maxBundle` **or** when the interval throttle fires—whichever comes first. Bursts ship promptly; steady traffic is batched on the interval.
+
+Optional `maxBundle` (default **100**) and `interval` in milliseconds (default **15000**). Bundle-size flushes are immediate and cancel any pending interval send.
+
+```javascript
+const hybridStrategy = new strategy.HybridStrategy({
+    maxBundle: 100,
     interval: 10000,
 })
 ```

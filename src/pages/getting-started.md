@@ -127,7 +127,7 @@ Remote services use **`fetch`**. Unlike axios, `fetch` does not reject on HTTP e
 
 ### Lifecycle
 
-Strategies that use timers or throttling (for example `OnIntervalStrategy`) register listeners until torn down. When you are done with a logger instance, call:
+Strategies that use timers or throttling (for example `OnIntervalStrategy` or `HybridStrategy`) register listeners until torn down. When you are done with a logger instance, call:
 
 ```javascript
 logger.destroy()
