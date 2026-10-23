@@ -15,6 +15,7 @@ type DataProps = {
         html: string
         frontmatter: {
             date: string
+            published: string
             title: string
             description: string
         }
@@ -47,11 +48,14 @@ export default Template
 
 export const Head = ({ data, location }: HeadProps<DataProps, Context>) => {
     const post = data.markdownRemark
+    const isHome = location.pathname === "/" || location.pathname === ""
     return (
         <SeoHead
             title={post.frontmatter.title}
             description={post.frontmatter.description || post.excerpt}
             pathname={location.pathname}
+            jsonLd={isHome ? "home" : "tech-article"}
+            datePublished={isHome ? undefined : post.frontmatter.published}
         />
     )
 }
@@ -65,6 +69,7 @@ export const pageQuery = graphql`
             frontmatter {
                 title
                 date(formatString: "MMMM DD, YYYY")
+                published: date(formatString: "YYYY-MM-DD")
                 description
             }
         }

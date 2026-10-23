@@ -16,6 +16,7 @@ type DataProps = {
         html: string
         frontmatter: {
             date: string
+            published: string
             title: string
             description: string
         }
@@ -86,6 +87,8 @@ export const Head = ({ data, location }: HeadProps<DataProps, Context>) => {
             title={post.frontmatter.title}
             description={post.frontmatter.description}
             pathname={location.pathname}
+            jsonLd="tech-article"
+            datePublished={post.frontmatter.published}
         />
     )
 }
@@ -98,6 +101,7 @@ export const pageQuery = graphql`
             frontmatter {
                 title
                 date(formatString: "MMMM DD, YYYY")
+                published: date(formatString: "YYYY-MM-DD")
                 description
             }
         }
