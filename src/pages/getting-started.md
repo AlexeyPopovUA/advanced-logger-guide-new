@@ -2,7 +2,7 @@
 title: Getting started
 date: "2022-05-29T22:12:03.284Z"
 template: regular-static-page
-description: Install advanced-logger and configure your first logs from Node.js or the browser using native fetch.
+description: Install advanced-logger and send your first logs from Node.js or the browser with native fetch, named exports, and a built-in strategy.
 ---
 
 ### Add to the project

@@ -2,7 +2,7 @@
 title: Contribution
 date: "2022-05-29T22:12:03.284Z"
 template: regular-static-page
-description: Build, test, and contribute to the advanced-logger open-source npm package.
+description: Set up a local build, run the test suite, and contribute fixes or features to the advanced-logger open-source npm package.
 ---
 
 This page describes contributing to the **[advanced-logger](https://github.com/AlexeyPopovUA/advanced-logger)** npm library. To change **this documentation site**, edit the [advanced-logger-guide](https://github.com/AlexeyPopovUA/advanced-logger-guide) repository instead.

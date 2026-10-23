@@ -2,7 +2,7 @@
 title: Strategy
 date: "2022-05-29T22:12:03.284Z"
 template: regular-static-page
-description: Control when logs are sent with instant, interval, bundle-size, hybrid, and on-request strategies.
+description: "Choose when advanced-logger flushes logs: instant, interval, bundle size, hybrid, or only when your application calls sendAllLogs."
 ---
 
 Strategies decide **when** buffered logs are flushed to the configured service. Each strategy exposes an `eventEmitter` and emits `"send"` when it is time to post logs.

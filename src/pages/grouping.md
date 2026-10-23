@@ -2,7 +2,7 @@
 title: Grouping
 date: "2022-05-29T22:12:03.284Z"
 template: regular-static-page
-description: Group duplicate logs within a time interval to reduce noise in your log stream.
+description: Collapse duplicate advanced-logger events inside a time window so rapid-fire repeats become one quieter entry in your log stream.
 ---
 
 Logs that share the same identity fields can be grouped within a time window so rapid duplicate events are counted instead of flooding your remote store.

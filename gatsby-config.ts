@@ -5,7 +5,7 @@ module.exports = {
             name: `Oleksii Popov`,
             summary: `summary text`,
         },
-        description: `Documentation for advanced-logger, an extendable isomorphic TypeScript logging library for Node.js and browsers.`,
+        description: `Documentation for advanced-logger, an extendable isomorphic TypeScript logging library that batches and ships logs from Node.js and browsers.`,
         siteUrl: `https://www.advancedlogger.com`,
     },
     plugins: [

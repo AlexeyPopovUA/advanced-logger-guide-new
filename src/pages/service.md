@@ -2,7 +2,7 @@
 title: Service
 date: "2022-05-29T22:12:03.284Z"
 template: regular-static-page
-description: Send logs to Sumologic, Loggly, or Elasticsearch using built-in advanced-logger service adapters.
+description: Send advanced-logger batches to Sumologic, Loggly, or Elasticsearch with built-in HTTP adapters, or plug in your own service.
 ---
 
 All examples assume you already imported the API:
